@@ -1,0 +1,2066 @@
+[
+  {
+    "id": "acxiom",
+    "name": "Acxiom LLC",
+    "domains": [
+      "acxiom.com"
+    ],
+    "category": "location",
+    "surface": "private",
+    "establishedIn": "US-AR",
+    "targetsRegions": [
+      "US",
+      "US-CA"
+    ],
+    "legalContact": {
+      "email": "askprivacy@acxiom.com",
+      "privacyPortal": "www.acxiom.com/privacy",
+      "postal": "301 E Dave Ward Drive, Conway, AR"
+    },
+    "severity": 8,
+    "medianResponseDays": 5,
+    "requiredIdentifiers": [
+      "date_of_birth"
+    ],
+    "sectoralRegimes": [],
+    "rateLimitPerHour": 60,
+    "provenance": "cppa-registry:2026-10-26"
+  },
+  {
+    "id": "apollo-interactive",
+    "name": "Apollo Interactive, LLC",
+    "domains": [
+      "apollointeractive.com",
+      "mortgageratespro.com",
+      "online-mortgage-loans.com",
+      "final-expense-quotes.com",
+      "greatlifeinsurancegroup.com",
+      "lifeinsurancepro.org",
+      "nationalhomequotes.com",
+      "bestautoinsurance.com",
+      "blueskycoverage.com",
+      "nationalautoquotes.com",
+      "affordablehealthquotesforyou.com",
+      "online-health-insurance.com",
+      "healthplansamerica.org",
+      "medicarecoveragefinder.com",
+      "medicareinfo.org",
+      "medicare-providers.net",
+      "direct-mortgage-quotes.com",
+      "insuranceplanmarket.com",
+      "petinsurancemarket.com",
+      "autopolicymarket.com",
+      "healthplanmarket.com",
+      "yourpolicyguide.com",
+      "medicaremarket.com",
+      "medicareplan.net"
+    ],
+    "category": "risk_mitigation",
+    "surface": "private",
+    "establishedIn": "US-CA",
+    "targetsRegions": [
+      "US",
+      "US-CA"
+    ],
+    "legalContact": {
+      "email": "deatherage@apollointeractive.com",
+      "privacyPortal": "https://www.apollointeractive.com/privacy-policy.php",
+      "postal": "139 Illinois St, El Segundo, CA"
+    },
+    "severity": 4,
+    "medianResponseDays": 1,
+    "requiredIdentifiers": [],
+    "sectoralRegimes": [],
+    "rateLimitPerHour": 60,
+    "provenance": "cppa-registry:2026-10-26"
+  },
+  {
+    "id": "aristotle",
+    "name": "Aristotle International, Inc.",
+    "domains": [
+      "aristotle.com"
+    ],
+    "category": "financial",
+    "surface": "private",
+    "establishedIn": "US-DC",
+    "targetsRegions": [
+      "US",
+      "US-CA"
+    ],
+    "legalContact": {
+      "email": "dpo@aristotle.com",
+      "privacyPortal": "https://www.aristotle.com/privacy/addendum-for-california-residents/",
+      "postal": "205 Pennsylvania Ave., SE, Washington, DC"
+    },
+    "severity": 6,
+    "medianResponseDays": 1,
+    "requiredIdentifiers": [
+      "street_address",
+      "date_of_birth"
+    ],
+    "sectoralRegimes": [
+      "GLBA"
+    ],
+    "rateLimitPerHour": 60,
+    "provenance": "cppa-registry:2026-10-26"
+  },
+  {
+    "id": "autoweb",
+    "name": "AutoWeb, Inc.",
+    "domains": [
+      "autoweb.com"
+    ],
+    "category": "recruitment",
+    "surface": "private",
+    "establishedIn": "US-CA",
+    "targetsRegions": [
+      "US",
+      "US-CA"
+    ],
+    "legalContact": {
+      "email": "AutoLegal@autoweb.com",
+      "privacyPortal": "www.autoweb.com",
+      "postal": "1820 Bonanza St., Walnut Creek, CA"
+    },
+    "severity": 4,
+    "medianResponseDays": 7,
+    "requiredIdentifiers": [
+      "street_address",
+      "date_of_birth"
+    ],
+    "sectoralRegimes": [
+      "FCRA"
+    ],
+    "rateLimitPerHour": 60,
+    "provenance": "cppa-registry:2026-10-26"
+  },
+  {
+    "id": "awl",
+    "name": "AWL Holdings, LLC",
+    "domains": [
+      "allwebleads.com",
+      "insurancequotes.com",
+      "usinsuranceonline.com",
+      "affordable-home-insurance.org",
+      "discount-car-insurance-rates.com",
+      "general-liability-insurance-rates.com",
+      "affordable-health-insurance-plans.org",
+      "affordable-life-insurance-rates.org",
+      "privacyportal-eu.onetrust.com"
+    ],
+    "category": "risk_mitigation",
+    "surface": "private",
+    "establishedIn": "US-TX",
+    "targetsRegions": [
+      "US",
+      "US-CA"
+    ],
+    "legalContact": {
+      "email": "onlineops@awl.com",
+      "privacyPortal": "https://privacyportal-eu.onetrust.com/webform/031dc37f-2093-4055-9d04-22f83329fe9f/a4fb8ed6-8389-4a17-a3be-ca808c6b300e",
+      "postal": "9004 Anderson Mill Rd., Unit A,  Austin, TX"
+    },
+    "severity": 3,
+    "medianResponseDays": 1,
+    "requiredIdentifiers": [],
+    "sectoralRegimes": [],
+    "rateLimitPerHour": 60,
+    "provenance": "cppa-registry:2026-10-26"
+  },
+  {
+    "id": "beenverified",
+    "name": "BeenVerified, LLC and its subsidiaries and affiliates",
+    "domains": [
+      "beenverified.com",
+      "peoplelooker.com",
+      "numberguru.com",
+      "ownerly.com",
+      "neighborwho.com",
+      "peoplesmart.com",
+      "bumper.com",
+      "freephonetracer.com",
+      "emailfinder.com",
+      "moneybot5000.com",
+      "reversephone.com",
+      "wingmate.com",
+      "famfinder.com"
+    ],
+    "category": "people_search",
+    "surface": "public",
+    "establishedIn": "US-NY",
+    "targetsRegions": [
+      "US",
+      "US-CA"
+    ],
+    "legalContact": {
+      "email": "privacy@ltvco.com",
+      "privacyPortal": "https://www.beenverified.com/svc/optout/search/comprehensive_optouts",
+      "postal": "48 W 38th Street, 8th Floor, New York, NY"
+    },
+    "severity": 5,
+    "medianResponseDays": 3,
+    "requiredIdentifiers": [
+      "street_address",
+      "phone"
+    ],
+    "sectoralRegimes": [],
+    "rateLimitPerHour": 30,
+    "provenance": "cppa-registry:2026-10-26"
+  },
+  {
+    "id": "buxton",
+    "name": "Buxton Company, LLC",
+    "domains": [
+      "buxtonco.com"
+    ],
+    "category": "health",
+    "surface": "private",
+    "establishedIn": "US-TX",
+    "targetsRegions": [
+      "US",
+      "US-CA"
+    ],
+    "legalContact": {
+      "email": "consumerprivacy@buxtonco.com",
+      "privacyPortal": "https://www.buxtonco.com/privacy",
+      "postal": "2651 S Polaris Drive, Fort Worth, TX"
+    },
+    "severity": 7,
+    "medianResponseDays": 21,
+    "requiredIdentifiers": [
+      "date_of_birth"
+    ],
+    "sectoralRegimes": [
+      "HIPAA"
+    ],
+    "rateLimitPerHour": 60,
+    "provenance": "cppa-registry:2026-10-26"
+  },
+  {
+    "id": "buyerlink",
+    "name": "Buyerlink Inc.",
+    "domains": [
+      "buyerlink.co"
+    ],
+    "category": "recruitment",
+    "surface": "private",
+    "establishedIn": "US-CA",
+    "targetsRegions": [
+      "US",
+      "US-CA"
+    ],
+    "legalContact": {
+      "email": "legal@buyerlink.com",
+      "privacyPortal": "www.buyerlink.co",
+      "postal": "1820 Bonanza St., Walnut Creek, CA"
+    },
+    "severity": 4,
+    "medianResponseDays": 45,
+    "requiredIdentifiers": [
+      "street_address",
+      "date_of_birth"
+    ],
+    "sectoralRegimes": [
+      "FCRA"
+    ],
+    "rateLimitPerHour": 60,
+    "provenance": "cppa-registry:2026-10-26"
+  },
+  {
+    "id": "bv-insights",
+    "name": "BV Insights LLC",
+    "domains": [
+      "big-village.com"
+    ],
+    "category": "health",
+    "surface": "private",
+    "establishedIn": "US-FL",
+    "targetsRegions": [
+      "US",
+      "US-CA"
+    ],
+    "legalContact": {
+      "email": "jp.sardi@brightmountainmedia.com",
+      "privacyPortal": "https://big-village.com/privacy-policy/",
+      "postal": "6400 Congress Avenue, Suite 2050, Boca Raton, FL"
+    },
+    "severity": 5,
+    "medianResponseDays": 40,
+    "requiredIdentifiers": [],
+    "sectoralRegimes": [
+      "HIPAA"
+    ],
+    "rateLimitPerHour": 60,
+    "provenance": "cppa-registry:2026-10-26"
+  },
+  {
+    "id": "checkpeople",
+    "name": "CHECKPEOPLE, LLC",
+    "domains": [
+      "checkpeople.com"
+    ],
+    "category": "people_search",
+    "surface": "public",
+    "establishedIn": "US",
+    "targetsRegions": [
+      "US",
+      "US-CA"
+    ],
+    "legalContact": {
+      "email": "compliance@checkpeople.com",
+      "privacyPortal": "https://checkpeople.com/privacy-rights",
+      "postal": "111 N Orange Ave STE 800, Orlando, Florida"
+    },
+    "severity": 5,
+    "medianResponseDays": 0,
+    "requiredIdentifiers": [
+      "street_address",
+      "phone"
+    ],
+    "sectoralRegimes": [],
+    "rateLimitPerHour": 30,
+    "provenance": "cppa-registry:2026-10-26"
+  },
+  {
+    "id": "choreograph",
+    "name": "Choreograph LLC",
+    "domains": [
+      "choreograph.com"
+    ],
+    "category": "location",
+    "surface": "private",
+    "establishedIn": "US-NY",
+    "targetsRegions": [
+      "US",
+      "US-CA"
+    ],
+    "legalContact": {
+      "email": "datagovernance@choreograph.com",
+      "privacyPortal": "https://www.choreograph.com",
+      "postal": "175 Greenwich Street, New York, NY"
+    },
+    "severity": 7,
+    "medianResponseDays": 12,
+    "requiredIdentifiers": [],
+    "sectoralRegimes": [],
+    "rateLimitPerHour": 60,
+    "provenance": "cppa-registry:2026-10-26"
+  },
+  {
+    "id": "civil-data-research",
+    "name": "Civil Data Research, LLC",
+    "domains": [
+      "searchpublicrecords.com"
+    ],
+    "category": "people_search",
+    "surface": "public",
+    "establishedIn": "US-CA",
+    "targetsRegions": [
+      "US",
+      "US-CA"
+    ],
+    "legalContact": {
+      "email": "privacyinfo@searchpublicrecords.com",
+      "privacyPortal": "https://www.searchpublicrecords.com/help-center/privacy; https://www.searchpublicrecords.com/help-center/privacy-requests",
+      "postal": "315 Meigs Rd, Ste A292, Santa Barbara, CA"
+    },
+    "severity": 7,
+    "medianResponseDays": 3,
+    "requiredIdentifiers": [
+      "street_address",
+      "phone"
+    ],
+    "sectoralRegimes": [],
+    "rateLimitPerHour": 30,
+    "provenance": "cppa-registry:2026-10-26"
+  },
+  {
+    "id": "clearcompany",
+    "name": "ClearCompany, LLC",
+    "domains": [
+      "clearcompany.com"
+    ],
+    "category": "recruitment",
+    "surface": "private",
+    "establishedIn": "US-ME",
+    "targetsRegions": [
+      "US",
+      "US-CA"
+    ],
+    "legalContact": {
+      "email": "privacy@clearcompany.com",
+      "privacyPortal": "https://www.clearcompany.com/privacy-policy/",
+      "postal": "75 Park Street #5008,, Lewiston, ME"
+    },
+    "severity": 6,
+    "medianResponseDays": 3,
+    "requiredIdentifiers": [
+      "street_address",
+      "date_of_birth"
+    ],
+    "sectoralRegimes": [
+      "FCRA"
+    ],
+    "rateLimitPerHour": 60,
+    "provenance": "cppa-registry:2026-10-26"
+  },
+  {
+    "id": "clearview-ai",
+    "name": "Clearview AI, Inc.",
+    "domains": [
+      "clearview.ai"
+    ],
+    "category": "risk_mitigation",
+    "surface": "private",
+    "establishedIn": "US-TX",
+    "targetsRegions": [
+      "US",
+      "US-CA"
+    ],
+    "legalContact": {
+      "email": "privacy-requests@clearview.ai",
+      "privacyPortal": "https://www.clearview.ai/privacy-and-requests",
+      "postal": "1321 Upland Dr. #21141, Houston, TX"
+    },
+    "severity": 6,
+    "medianResponseDays": 17,
+    "requiredIdentifiers": [],
+    "sectoralRegimes": [],
+    "rateLimitPerHour": 60,
+    "provenance": "cppa-registry:2026-10-26"
+  },
+  {
+    "id": "consumerbase",
+    "name": "Consumerbase, LLC",
+    "domains": [
+      "exactdata.com"
+    ],
+    "category": "health",
+    "surface": "private",
+    "establishedIn": "US",
+    "targetsRegions": [
+      "US",
+      "US-CA"
+    ],
+    "legalContact": {
+      "email": "privacy@exactdata.com",
+      "privacyPortal": "https://www.exactdata.com",
+      "postal": "2451 W Grapevine Mills Cir. #538, Grapevine, Texas"
+    },
+    "severity": 5,
+    "medianResponseDays": 9,
+    "requiredIdentifiers": [],
+    "sectoralRegimes": [
+      "HIPAA"
+    ],
+    "rateLimitPerHour": 60,
+    "provenance": "cppa-registry:2026-10-26"
+  },
+  {
+    "id": "costar-realty-information",
+    "name": "CoStar Realty Information, Inc.",
+    "domains": [
+      "costar.com"
+    ],
+    "category": "location",
+    "surface": "private",
+    "establishedIn": "US",
+    "targetsRegions": [
+      "US",
+      "US-CA"
+    ],
+    "legalContact": {
+      "email": "globalprivacyinbox@costar.com",
+      "privacyPortal": "https://www.costar.com/about/privacy-notice",
+      "postal": "1201 Wilson Blvd, Arlington, Virginia"
+    },
+    "severity": 5,
+    "medianResponseDays": 5,
+    "requiredIdentifiers": [],
+    "sectoralRegimes": [],
+    "rateLimitPerHour": 60,
+    "provenance": "cppa-registry:2026-10-26"
+  },
+  {
+    "id": "cox-automotive",
+    "name": "Cox Automotive, Inc.",
+    "domains": [
+      "coxautoinc.com",
+      "autotrader.com",
+      "fordblueadvantage.com",
+      "kbb.com"
+    ],
+    "category": "financial",
+    "surface": "private",
+    "establishedIn": "US-GA",
+    "targetsRegions": [
+      "US",
+      "US-CA"
+    ],
+    "legalContact": {
+      "email": "consumer-privacy-ops@coxautoinc.com",
+      "privacyPortal": "https://www.coxautoinc.com/privacy-statement/; https://www.coxautoinc.com/consumerprivacyrights/",
+      "postal": "6205 Peachtree Dunwoody Rd., Atlanta, GA"
+    },
+    "severity": 10,
+    "medianResponseDays": 43,
+    "requiredIdentifiers": [
+      "street_address",
+      "date_of_birth"
+    ],
+    "sectoralRegimes": [
+      "GLBA"
+    ],
+    "rateLimitPerHour": 60,
+    "provenance": "cppa-registry:2026-10-26"
+  },
+  {
+    "id": "crunchbase",
+    "name": "Crunchbase, Inc.",
+    "domains": [
+      "crunchbase.com",
+      "about.crunchbase.com"
+    ],
+    "category": "marketing",
+    "surface": "private",
+    "establishedIn": "US",
+    "targetsRegions": [
+      "US",
+      "US-CA"
+    ],
+    "legalContact": {
+      "email": "legal@crunchbase.com",
+      "privacyPortal": "https://about.crunchbase.com/terms-of-service/privacy-policy",
+      "postal": "564 Market St., Suite 500, San Francisco, California"
+    },
+    "severity": 5,
+    "medianResponseDays": 48,
+    "requiredIdentifiers": [],
+    "sectoralRegimes": [],
+    "rateLimitPerHour": 60,
+    "provenance": "cppa-registry:2026-10-26"
+  },
+  {
+    "id": "data-axle",
+    "name": "Data Axle Inc.",
+    "domains": [
+      "data-axle.com"
+    ],
+    "category": "health",
+    "surface": "private",
+    "establishedIn": "US",
+    "targetsRegions": [
+      "US",
+      "US-CA"
+    ],
+    "legalContact": {
+      "email": "privacyteam@data-axle.com",
+      "privacyPortal": "https://www.data-axle.com",
+      "postal": "2451 W Grapevine Mills Cir. #538, Grapevine, Texas"
+    },
+    "severity": 5,
+    "medianResponseDays": 9,
+    "requiredIdentifiers": [],
+    "sectoralRegimes": [
+      "HIPAA"
+    ],
+    "rateLimitPerHour": 60,
+    "provenance": "cppa-registry:2026-10-26"
+  },
+  {
+    "id": "datalink-services",
+    "name": "Datalink Services, Inc",
+    "domains": [
+      "transunion.com"
+    ],
+    "category": "financial",
+    "surface": "private",
+    "establishedIn": "US-IL",
+    "targetsRegions": [
+      "US",
+      "US-CA"
+    ],
+    "legalContact": {
+      "email": "privacy@transunion.com",
+      "privacyPortal": "www.transunion.com",
+      "postal": "555 W Adams St, Chicago, IL"
+    },
+    "severity": 6,
+    "medianResponseDays": 0,
+    "requiredIdentifiers": [
+      "street_address",
+      "date_of_birth"
+    ],
+    "sectoralRegimes": [
+      "FCRA"
+    ],
+    "rateLimitPerHour": 60,
+    "provenance": "cppa-registry:2026-10-26"
+  },
+  {
+    "id": "deloitte-consulting",
+    "name": "Deloitte Consulting LLP",
+    "domains": [
+      "deloitte.com",
+      "healthprism.ai",
+      "peopleprism.ai",
+      "giveprism.ai",
+      "datasubject.deloitte.com"
+    ],
+    "category": "health",
+    "surface": "private",
+    "establishedIn": "US-MA",
+    "targetsRegions": [
+      "US",
+      "US-CA"
+    ],
+    "legalContact": {
+      "email": "usprivacyquestions@deloitte.com",
+      "privacyPortal": "https://datasubject.deloitte.com/",
+      "postal": "115 Federal Street, Boston, MA"
+    },
+    "severity": 5,
+    "medianResponseDays": 20,
+    "requiredIdentifiers": [],
+    "sectoralRegimes": [
+      "HIPAA"
+    ],
+    "rateLimitPerHour": 60,
+    "provenance": "cppa-registry:2026-10-26"
+  },
+  {
+    "id": "deloitte-financial-advisory-services",
+    "name": "Deloitte Financial Advisory Services LLP",
+    "domains": [
+      "deloitte.com",
+      "datasubject.deloitte.com"
+    ],
+    "category": "health",
+    "surface": "private",
+    "establishedIn": "US-NY",
+    "targetsRegions": [
+      "US",
+      "US-CA"
+    ],
+    "legalContact": {
+      "email": "usprivacyquestions@deloitte.com",
+      "privacyPortal": "https://datasubject.deloitte.com",
+      "postal": "30 Rockefeller Plaza, New York, NY"
+    },
+    "severity": 6,
+    "medianResponseDays": 20,
+    "requiredIdentifiers": [
+      "date_of_birth"
+    ],
+    "sectoralRegimes": [
+      "HIPAA"
+    ],
+    "rateLimitPerHour": 60,
+    "provenance": "cppa-registry:2026-10-26"
+  },
+  {
+    "id": "dtn",
+    "name": "DTN, LLC",
+    "domains": [
+      "dtn.com"
+    ],
+    "category": "location",
+    "surface": "private",
+    "establishedIn": "US-MN",
+    "targetsRegions": [
+      "US",
+      "US-CA"
+    ],
+    "legalContact": {
+      "email": "legal@dtn.com",
+      "privacyPortal": "www.dtn.com",
+      "postal": "2131 Lindau Lane, Suite 700, Bloomington, MN"
+    },
+    "severity": 5,
+    "medianResponseDays": 12,
+    "requiredIdentifiers": [],
+    "sectoralRegimes": [],
+    "rateLimitPerHour": 60,
+    "provenance": "cppa-registry:2026-10-26"
+  },
+  {
+    "id": "effyis",
+    "name": "Effyis, Inc.",
+    "domains": [
+      "socialgist.ai"
+    ],
+    "category": "marketing",
+    "surface": "private",
+    "establishedIn": "US-MI",
+    "targetsRegions": [
+      "US",
+      "US-CA"
+    ],
+    "legalContact": {
+      "email": "cwolfe@socialgist.com",
+      "privacyPortal": "https://www.socialgist.ai/privacy-and-terms",
+      "postal": "1050 Wilshire Drive, Suite 118, Troy, MI"
+    },
+    "severity": 4,
+    "medianResponseDays": 1,
+    "requiredIdentifiers": [],
+    "sectoralRegimes": [],
+    "rateLimitPerHour": 60,
+    "provenance": "cppa-registry:2026-10-26"
+  },
+  {
+    "id": "enformion",
+    "name": "Enformion, LLC",
+    "domains": [
+      "enformion.com",
+      "tracers.com",
+      "go.enformion.com"
+    ],
+    "category": "financial",
+    "surface": "private",
+    "establishedIn": "US-CA",
+    "targetsRegions": [
+      "US",
+      "US-CA"
+    ],
+    "legalContact": {
+      "email": "support@enformion.com",
+      "privacyPortal": "https://www.enformion.com/privacy-policy/; https://go.enformion.com/privacy-policy/; https://www.tracers.com/privacy/",
+      "postal": "1915 21st St, Sacramento, CA"
+    },
+    "severity": 8,
+    "medianResponseDays": 31,
+    "requiredIdentifiers": [
+      "street_address",
+      "date_of_birth"
+    ],
+    "sectoralRegimes": [
+      "GLBA"
+    ],
+    "rateLimitPerHour": 60,
+    "provenance": "cppa-registry:2026-10-26"
+  },
+  {
+    "id": "epsilon-data-management",
+    "name": "Epsilon Data Management, LLC",
+    "domains": [
+      "epsilon.com",
+      "legal.epsilon.com"
+    ],
+    "category": "marketing",
+    "surface": "private",
+    "establishedIn": "US-TX",
+    "targetsRegions": [
+      "US",
+      "US-CA"
+    ],
+    "legalContact": {
+      "email": "privacy@epsilon.com",
+      "privacyPortal": "https://legal.epsilon.com/dsr/",
+      "postal": "6021 Connection Drive, Irving, TX"
+    },
+    "severity": 5,
+    "medianResponseDays": 2,
+    "requiredIdentifiers": [],
+    "sectoralRegimes": [],
+    "rateLimitPerHour": 60,
+    "provenance": "cppa-registry:2026-10-26"
+  },
+  {
+    "id": "equifax-information-services",
+    "name": "Equifax Information Services LLC",
+    "domains": [
+      "equifax.com"
+    ],
+    "category": "financial",
+    "surface": "private",
+    "establishedIn": "US-GA",
+    "targetsRegions": [
+      "US",
+      "US-CA"
+    ],
+    "legalContact": {
+      "email": "usprivacy@equifax.com",
+      "privacyPortal": "https://www.equifax.com/personal/my-privacy/",
+      "postal": "1550 Peachtree St NW, Atlanta, GA"
+    },
+    "severity": 10,
+    "medianResponseDays": 1,
+    "requiredIdentifiers": [
+      "street_address",
+      "date_of_birth"
+    ],
+    "sectoralRegimes": [
+      "FCRA",
+      "GLBA",
+      "HIPAA"
+    ],
+    "rateLimitPerHour": 60,
+    "provenance": "cppa-registry:2026-10-26"
+  },
+  {
+    "id": "equifax-workforce",
+    "name": "Equifax Workforce Solutions LLC",
+    "domains": [
+      "theworknumber.com",
+      "equifax.com"
+    ],
+    "category": "financial",
+    "surface": "private",
+    "establishedIn": "US-GA",
+    "targetsRegions": [
+      "US",
+      "US-CA"
+    ],
+    "legalContact": {
+      "email": "usprivacy@equifax.com",
+      "privacyPortal": "https://www.equifax.com/personal/my-privacy/",
+      "postal": "1550 Peachtree St NW, Atlanta, GA"
+    },
+    "severity": 10,
+    "medianResponseDays": 1,
+    "requiredIdentifiers": [
+      "street_address",
+      "date_of_birth"
+    ],
+    "sectoralRegimes": [
+      "FCRA"
+    ],
+    "rateLimitPerHour": 60,
+    "provenance": "cppa-registry:2026-10-26"
+  },
+  {
+    "id": "experian-information",
+    "name": "Experian Information Solutions, Inc",
+    "domains": [
+      "experian.com",
+      "consumerprivacy.experian.com"
+    ],
+    "category": "financial",
+    "surface": "private",
+    "establishedIn": "US-CA",
+    "targetsRegions": [
+      "US",
+      "US-CA"
+    ],
+    "legalContact": {
+      "email": "CA_DROP_FSD@experian.com",
+      "privacyPortal": "https://www.experian.com/privacy/us-consumer-data-privacy-policy; https://consumerprivacy.experian.com",
+      "postal": "475 Anton Blvd, Costa Mesa, CA"
+    },
+    "severity": 6,
+    "medianResponseDays": 1,
+    "requiredIdentifiers": [
+      "street_address",
+      "date_of_birth"
+    ],
+    "sectoralRegimes": [
+      "FCRA",
+      "GLBA"
+    ],
+    "rateLimitPerHour": 60,
+    "provenance": "cppa-registry:2026-10-26"
+  },
+  {
+    "id": "family-tree-now",
+    "name": "Family Tree Now, LLC",
+    "domains": [
+      "familytreenow.com"
+    ],
+    "category": "people_search",
+    "surface": "public",
+    "establishedIn": "US-CA",
+    "targetsRegions": [
+      "US",
+      "US-CA"
+    ],
+    "legalContact": {
+      "email": "privacy@familytreenow.com",
+      "privacyPortal": "https://www.familytreenow.com/privacy; https://www.familytreenow.com/notice-at-collection",
+      "postal": "PO Box 515381 PMB 29296, Los Angeles, CA"
+    },
+    "severity": 5,
+    "medianResponseDays": 1,
+    "requiredIdentifiers": [
+      "street_address",
+      "phone"
+    ],
+    "sectoralRegimes": [],
+    "rateLimitPerHour": 30,
+    "provenance": "cppa-registry:2026-10-26"
+  },
+  {
+    "id": "fideo-intelligence",
+    "name": "Fideo Intelligence, Inc.",
+    "domains": [
+      "fideo.ai",
+      "app.fideo.ai"
+    ],
+    "category": "marketing",
+    "surface": "private",
+    "establishedIn": "US",
+    "targetsRegions": [
+      "US",
+      "US-CA"
+    ],
+    "legalContact": {
+      "email": "dpo@fideo.ai",
+      "privacyPortal": "https://app.fideo.ai/your-privacy-choices",
+      "postal": "1580 N. Logan St., Denver, Colorado"
+    },
+    "severity": 6,
+    "medianResponseDays": 3,
+    "requiredIdentifiers": [
+      "date_of_birth"
+    ],
+    "sectoralRegimes": [],
+    "rateLimitPerHour": 60,
+    "provenance": "cppa-registry:2026-10-26"
+  },
+  {
+    "id": "freepeoplesearch-com",
+    "name": "FREEPEOPLESEARCH.COM, LLC",
+    "domains": [
+      "freepeoplesearch.com"
+    ],
+    "category": "people_search",
+    "surface": "public",
+    "establishedIn": "US",
+    "targetsRegions": [
+      "US",
+      "US-CA"
+    ],
+    "legalContact": {
+      "email": "compliance@freepeoplesearch.com",
+      "privacyPortal": "https://freepeoplesearch.com/privacy-rights/",
+      "postal": "360 Central Ave STE 800, St. Petersburg, Florida"
+    },
+    "severity": 5,
+    "medianResponseDays": 0,
+    "requiredIdentifiers": [
+      "street_address",
+      "phone"
+    ],
+    "sectoralRegimes": [],
+    "rateLimitPerHour": 30,
+    "provenance": "cppa-registry:2026-10-26"
+  },
+  {
+    "id": "general-motors",
+    "name": "General Motors LLC",
+    "domains": [
+      "gm.com"
+    ],
+    "category": "health",
+    "surface": "private",
+    "establishedIn": "US-MI",
+    "targetsRegions": [
+      "US",
+      "US-CA"
+    ],
+    "legalContact": {
+      "email": "privacy@gm.com",
+      "privacyPortal": "https://www.gm.com/consumer-privacy",
+      "postal": "300 RENAISSANCE CENTER, Detroit, MI"
+    },
+    "severity": 9,
+    "medianResponseDays": 30,
+    "requiredIdentifiers": [
+      "date_of_birth"
+    ],
+    "sectoralRegimes": [
+      "HIPAA",
+      "CMIA"
+    ],
+    "rateLimitPerHour": 60,
+    "provenance": "cppa-registry:2026-10-26"
+  },
+  {
+    "id": "global-source-data",
+    "name": "Global Source Data Solutions Inc",
+    "domains": [
+      "gsdsi.com"
+    ],
+    "category": "location",
+    "surface": "private",
+    "establishedIn": "US",
+    "targetsRegions": [
+      "US",
+      "US-CA"
+    ],
+    "legalContact": {
+      "email": "privacy@gsdsi.com",
+      "privacyPortal": "https://gsdsi.com/privacy",
+      "postal": "3410 Galt Ocean Dr. 2103N, Fort Lauderdale, Florida"
+    },
+    "severity": 8,
+    "medianResponseDays": 0,
+    "requiredIdentifiers": [
+      "date_of_birth"
+    ],
+    "sectoralRegimes": [],
+    "rateLimitPerHour": 60,
+    "provenance": "cppa-registry:2026-10-26"
+  },
+  {
+    "id": "globicom",
+    "name": "Globicom Inc",
+    "domains": [
+      "recordsfinder.com",
+      "peoplepublicrecords.org"
+    ],
+    "category": "people_search",
+    "surface": "public",
+    "establishedIn": "US",
+    "targetsRegions": [
+      "US",
+      "US-CA"
+    ],
+    "legalContact": {
+      "email": "aregsakanyan@gmail.com",
+      "privacyPortal": "https://recordsfinder.com/optout/",
+      "postal": "60 Raffaele Dr, Waltham, Massachusetts"
+    },
+    "severity": 5,
+    "medianResponseDays": 6,
+    "requiredIdentifiers": [
+      "street_address",
+      "phone"
+    ],
+    "sectoralRegimes": [],
+    "rateLimitPerHour": 30,
+    "provenance": "cppa-registry:2026-10-26"
+  },
+  {
+    "id": "healthcare",
+    "name": "Healthcare Inc",
+    "domains": [
+      "healthcare.com",
+      "pivothealth.com"
+    ],
+    "category": "health",
+    "surface": "private",
+    "establishedIn": "US",
+    "targetsRegions": [
+      "US",
+      "US-CA"
+    ],
+    "legalContact": {
+      "email": "security@healthcare.com",
+      "privacyPortal": "https://www.healthcare.com/privacy-policy",
+      "postal": "3401 North Miami Avenue, Suite 205, Miami, Florida"
+    },
+    "severity": 7,
+    "medianResponseDays": 8,
+    "requiredIdentifiers": [],
+    "sectoralRegimes": [
+      "HIPAA"
+    ],
+    "rateLimitPerHour": 60,
+    "provenance": "cppa-registry:2026-10-26"
+  },
+  {
+    "id": "healthwise-data",
+    "name": "HealthWise Data",
+    "domains": [
+      "healthwisedata.com"
+    ],
+    "category": "health",
+    "surface": "private",
+    "establishedIn": "US-GA",
+    "targetsRegions": [
+      "US",
+      "US-CA"
+    ],
+    "legalContact": {
+      "email": "privacy@healthwisedata.com",
+      "privacyPortal": "https://www.healthwisedata.com",
+      "postal": "300 Colonial Center Pkwy, Suite 100, Roswell, GA"
+    },
+    "severity": 6,
+    "medianResponseDays": 14,
+    "requiredIdentifiers": [],
+    "sectoralRegimes": [],
+    "rateLimitPerHour": 60,
+    "provenance": "cppa-registry:2026-10-26"
+  },
+  {
+    "id": "infopay",
+    "name": "InfoPay, Inc",
+    "domains": [
+      "infopay.com",
+      "infotracer.com",
+      "propertychecker.com",
+      "goodcar.com",
+      "statecourts.org",
+      "courtcasefinder.com",
+      "thepublicindex.org",
+      "entitycheck.com",
+      "sentinex.org",
+      "idstrong.com",
+      "courtrecords.us",
+      "staterecords.org",
+      "recordsfinder.com",
+      "sentinex.com",
+      "members.idstrong.com"
+    ],
+    "category": "people_search",
+    "surface": "public",
+    "establishedIn": "US",
+    "targetsRegions": [
+      "US",
+      "US-CA"
+    ],
+    "legalContact": {
+      "email": "compliance@infopay.com",
+      "privacyPortal": "https://www.infopay.com/privacy; https://propertychecker.com/optout; https://recordsfinder.com/optout/; https://sentinex.com/optout; https://www.statecourts.org/optout/; https://staterecords.org/optout; https://thepublicindex.org/optout; https://courtcasefinder.com/optout; https://courtrecords.us/optout/; https://entitycheck.com/optout; https://goodcar.com/optout; https://members.idstrong.com/opt-out/; https://infotracer.com/optout/",
+      "postal": "227 Lewis Wharf, Boston, Massachusetts"
+    },
+    "severity": 5,
+    "medianResponseDays": 6,
+    "requiredIdentifiers": [
+      "street_address",
+      "phone"
+    ],
+    "sectoralRegimes": [],
+    "rateLimitPerHour": 30,
+    "provenance": "cppa-registry:2026-10-26"
+  },
+  {
+    "id": "insightbridge",
+    "name": "Insightbridge LLC",
+    "domains": [
+      "mylife.com"
+    ],
+    "category": "people_search",
+    "surface": "public",
+    "establishedIn": "US-WY",
+    "targetsRegions": [
+      "US",
+      "US-CA"
+    ],
+    "legalContact": {
+      "email": "membersupport@mylife.com",
+      "privacyPortal": "https://www.mylife.com",
+      "postal": "1309 Coffeen Avenue, Suite 14998, Sheridan, WY"
+    },
+    "severity": 5,
+    "medianResponseDays": 2,
+    "requiredIdentifiers": [
+      "street_address",
+      "phone"
+    ],
+    "sectoralRegimes": [],
+    "rateLimitPerHour": 30,
+    "provenance": "cppa-registry:2026-10-26"
+  },
+  {
+    "id": "instant-checkmate",
+    "name": "Instant Checkmate LLC",
+    "domains": [
+      "instantcheckmate.com",
+      "cellphonedirectory.com",
+      "cheaterslie.com",
+      "freepeople-search.com"
+    ],
+    "category": "people_search",
+    "surface": "public",
+    "establishedIn": "US-CA",
+    "targetsRegions": [
+      "US",
+      "US-CA"
+    ],
+    "legalContact": {
+      "email": "tara.buck@peopleconnect.us",
+      "privacyPortal": "www.instantcheckmate.com/privacy-center",
+      "postal": "375 Camino De La Reina, Ste. 400, San Diego, CA"
+    },
+    "severity": 5,
+    "medianResponseDays": 1,
+    "requiredIdentifiers": [
+      "street_address",
+      "phone"
+    ],
+    "sectoralRegimes": [],
+    "rateLimitPerHour": 30,
+    "provenance": "cppa-registry:2026-10-26"
+  },
+  {
+    "id": "intelius",
+    "name": "Intelius, LLC",
+    "domains": [
+      "intelius.com",
+      "ussearch.com",
+      "pro.ussearch.com",
+      "arrestrecordsearch.com",
+      "criminalrecords.com",
+      "peoplefinder.com",
+      "peoplefind.com",
+      "telephonenumberlookups.com",
+      "reversephonelookup.com",
+      "brbpub.com",
+      "callercomplaints.com",
+      "courtreference.com",
+      "easybackgroundchecks.com",
+      "freebackgroundchecksusa.com",
+      "onlinesearches.com",
+      "snoopstation.com",
+      "zabasearch.com",
+      "addresses.com",
+      "publicrecords.com",
+      "publicrecords.onlinesearches.com",
+      "peoplelookup.com",
+      "publicrecords360.com"
+    ],
+    "category": "people_search",
+    "surface": "public",
+    "establishedIn": "US-CA",
+    "targetsRegions": [
+      "US",
+      "US-CA"
+    ],
+    "legalContact": {
+      "email": "legal@intelius.com",
+      "privacyPortal": "www.intelius.com/privacy-center",
+      "postal": "375 Camino De La Reina, Suite 400, San Diego, CA"
+    },
+    "severity": 5,
+    "medianResponseDays": 1,
+    "requiredIdentifiers": [
+      "street_address",
+      "phone"
+    ],
+    "sectoralRegimes": [],
+    "rateLimitPerHour": 30,
+    "provenance": "cppa-registry:2026-10-26"
+  },
+  {
+    "id": "interactive-data",
+    "name": "Interactive Data, LLC",
+    "domains": [
+      "ididata.com"
+    ],
+    "category": "financial",
+    "surface": "private",
+    "establishedIn": "US",
+    "targetsRegions": [
+      "US",
+      "US-CA"
+    ],
+    "legalContact": {
+      "email": "statebasedprivacy@ididata.com",
+      "privacyPortal": "https://www.ididata.com/idis-privacy-statement/",
+      "postal": "2650 N Military Trail, Suite 300, Boca Raton, Florida"
+    },
+    "severity": 6,
+    "medianResponseDays": 6,
+    "requiredIdentifiers": [
+      "street_address",
+      "date_of_birth"
+    ],
+    "sectoralRegimes": [
+      "GLBA"
+    ],
+    "rateLimitPerHour": 60,
+    "provenance": "cppa-registry:2026-10-26"
+  },
+  {
+    "id": "intermedia-ventures",
+    "name": "Intermedia Ventures, LLC",
+    "domains": [
+      "staterecords.org",
+      "courtrecords.us",
+      "californiacourtrecords.us"
+    ],
+    "category": "people_search",
+    "surface": "public",
+    "establishedIn": "US-TX",
+    "targetsRegions": [
+      "US",
+      "US-CA"
+    ],
+    "legalContact": {
+      "email": "compliance@intermedia.team",
+      "privacyPortal": "https://staterecords.org/optout; https://courtrecords.us/optout/; https://californiacourtrecords.us/optout/",
+      "postal": "5900 Balcones Drive, Ste 100, Austin, TX"
+    },
+    "severity": 5,
+    "medianResponseDays": 6,
+    "requiredIdentifiers": [
+      "street_address",
+      "phone"
+    ],
+    "sectoralRegimes": [],
+    "rateLimitPerHour": 30,
+    "provenance": "cppa-registry:2026-10-26"
+  },
+  {
+    "id": "lead-intelligence",
+    "name": "Lead Intelligence Inc.",
+    "domains": [
+      "infutor.com"
+    ],
+    "category": "recruitment",
+    "surface": "private",
+    "establishedIn": "US-TX",
+    "targetsRegions": [
+      "US",
+      "US-CA"
+    ],
+    "legalContact": {
+      "email": "privacy@infutor.com",
+      "privacyPortal": "https://infutor.com/privacy-center/",
+      "postal": "5900 Balcones Drive, Suite 100, Austin, TX"
+    },
+    "severity": 3,
+    "medianResponseDays": 1,
+    "requiredIdentifiers": [
+      "street_address",
+      "date_of_birth"
+    ],
+    "sectoralRegimes": [
+      "FCRA"
+    ],
+    "rateLimitPerHour": 60,
+    "provenance": "cppa-registry:2026-10-26"
+  },
+  {
+    "id": "lexisnexis-risk-fl",
+    "name": "LexisNexis Risk Solutions FL Inc.",
+    "domains": [
+      "risk.lexisnexis.com",
+      "consumer.risk.lexisnexis.com"
+    ],
+    "category": "risk_mitigation",
+    "surface": "private",
+    "establishedIn": "US-GA",
+    "targetsRegions": [
+      "US",
+      "US-CA"
+    ],
+    "legalContact": {
+      "email": "consumer.documents@lexisnexisrisk.com",
+      "privacyPortal": "https://risk.lexisnexis.com/state-privacy-act-notice; https://consumer.risk.lexisnexis.com/request#california",
+      "postal": "1000 Alderman Drive, Alpharetta, GA"
+    },
+    "severity": 9,
+    "medianResponseDays": 1,
+    "requiredIdentifiers": [
+      "date_of_birth"
+    ],
+    "sectoralRegimes": [
+      "GLBA",
+      "HIPAA",
+      "CMIA",
+      "IIPPA"
+    ],
+    "rateLimitPerHour": 60,
+    "provenance": "cppa-registry:2026-10-26"
+  },
+  {
+    "id": "marriott",
+    "name": "Marriott International, Inc.",
+    "domains": [
+      "marriott.com"
+    ],
+    "category": "location",
+    "surface": "private",
+    "establishedIn": "US",
+    "targetsRegions": [
+      "US",
+      "US-CA"
+    ],
+    "legalContact": {
+      "email": "privacy@marriott.com",
+      "privacyPortal": "https://www.marriott.com/about/privacy.mi",
+      "postal": "7750 Wisconsin Avenue, Bethesda, Maryland"
+    },
+    "severity": 8,
+    "medianResponseDays": 16,
+    "requiredIdentifiers": [
+      "date_of_birth"
+    ],
+    "sectoralRegimes": [],
+    "rateLimitPerHour": 60,
+    "provenance": "cppa-registry:2026-10-26"
+  },
+  {
+    "id": "maxmind",
+    "name": "MaxMind, Inc.",
+    "domains": [
+      "maxmind.com"
+    ],
+    "category": "marketing",
+    "surface": "private",
+    "establishedIn": "US-MA",
+    "targetsRegions": [
+      "US",
+      "US-CA"
+    ],
+    "legalContact": {
+      "email": "tgonzalez@maxmind.com",
+      "privacyPortal": "https://www.maxmind.com/en/privacy-policy",
+      "postal": "51 Pleasant St. #1020, Malden, MA"
+    },
+    "severity": 4,
+    "medianResponseDays": 4,
+    "requiredIdentifiers": [],
+    "sectoralRegimes": [],
+    "rateLimitPerHour": 60,
+    "provenance": "cppa-registry:2026-10-26"
+  },
+  {
+    "id": "meltwater-news",
+    "name": "Meltwater News US, Inc.",
+    "domains": [
+      "meltwater.com"
+    ],
+    "category": "marketing",
+    "surface": "private",
+    "establishedIn": "US-CA",
+    "targetsRegions": [
+      "US",
+      "US-CA"
+    ],
+    "legalContact": {
+      "email": "privacy@meltwater.com",
+      "privacyPortal": "meltwater.com/privacy",
+      "postal": "275 Shoreline Drive, Suite 150, Redwood City, CA"
+    },
+    "severity": 5,
+    "medianResponseDays": 23,
+    "requiredIdentifiers": [],
+    "sectoralRegimes": [],
+    "rateLimitPerHour": 60,
+    "provenance": "cppa-registry:2026-10-26"
+  },
+  {
+    "id": "moody-s",
+    "name": "Moody's Corporation",
+    "domains": [
+      "moodys.com"
+    ],
+    "category": "marketing",
+    "surface": "private",
+    "establishedIn": "US",
+    "targetsRegions": [
+      "US",
+      "US-CA"
+    ],
+    "legalContact": {
+      "email": "Privacy@moodys.com",
+      "privacyPortal": "https://www.moodys.com/web/en/us/legal/privacy-policy.html",
+      "postal": "7 World Trade Center at 250 Greenwich Street, New York, New York"
+    },
+    "severity": 4,
+    "medianResponseDays": 14,
+    "requiredIdentifiers": [],
+    "sectoralRegimes": [],
+    "rateLimitPerHour": 60,
+    "provenance": "cppa-registry:2026-10-26"
+  },
+  {
+    "id": "neustar-information-services",
+    "name": "Neustar Information Services, Inc.",
+    "domains": [
+      "transunion.com"
+    ],
+    "category": "financial",
+    "surface": "private",
+    "establishedIn": "US-IL",
+    "targetsRegions": [
+      "US",
+      "US-CA"
+    ],
+    "legalContact": {
+      "email": "ns_privacy@transunion.com",
+      "privacyPortal": "www.transunion.com",
+      "postal": "555 W Adams St, Chicago, IL"
+    },
+    "severity": 10,
+    "medianResponseDays": 0,
+    "requiredIdentifiers": [
+      "street_address",
+      "date_of_birth"
+    ],
+    "sectoralRegimes": [
+      "GLBA",
+      "HIPAA"
+    ],
+    "rateLimitPerHour": 60,
+    "provenance": "cppa-registry:2026-10-26"
+  },
+  {
+    "id": "nuwber",
+    "name": "Nuwber Inc",
+    "domains": [
+      "nuwber.com"
+    ],
+    "category": "people_search",
+    "surface": "public",
+    "establishedIn": "US-VA",
+    "targetsRegions": [
+      "US",
+      "US-CA"
+    ],
+    "legalContact": {
+      "email": "support@nuwber.com",
+      "privacyPortal": "https://nuwber.com/policy",
+      "postal": "700 North Fairfax Street, Suite 614, Alexandria, VA"
+    },
+    "severity": 5,
+    "medianResponseDays": 0,
+    "requiredIdentifiers": [
+      "street_address",
+      "phone"
+    ],
+    "sectoralRegimes": [],
+    "rateLimitPerHour": 30,
+    "provenance": "cppa-registry:2026-10-26"
+  },
+  {
+    "id": "pitchbook-data",
+    "name": "PitchBook Data Inc",
+    "domains": [
+      "pitchbook.com"
+    ],
+    "category": "marketing",
+    "surface": "private",
+    "establishedIn": "US-WA",
+    "targetsRegions": [
+      "US",
+      "US-CA"
+    ],
+    "legalContact": {
+      "email": "legal@pitchbook.com",
+      "privacyPortal": "https://pitchbook.com/privacy-policy",
+      "postal": "901 5th Ave, Suite 1200, Seattle, WA"
+    },
+    "severity": 5,
+    "medianResponseDays": 5,
+    "requiredIdentifiers": [],
+    "sectoralRegimes": [],
+    "rateLimitPerHour": 60,
+    "provenance": "cppa-registry:2026-10-26"
+  },
+  {
+    "id": "private-records",
+    "name": "Private Records LLC",
+    "domains": [
+      "privaterecords.net",
+      "peoplesearch123.com",
+      "backgroundcheckers.net",
+      "personsearchers.com"
+    ],
+    "category": "people_search",
+    "surface": "public",
+    "establishedIn": "US-FL",
+    "targetsRegions": [
+      "US",
+      "US-CA"
+    ],
+    "legalContact": {
+      "email": "support@privaterecords.net",
+      "privacyPortal": "https://www.privaterecords.net; peoplesearch123.com; backgroundcheckers.net; personsearchers.com",
+      "postal": "1317 Edgewater Dr #1255, Orlando, FL"
+    },
+    "severity": 5,
+    "medianResponseDays": 1,
+    "requiredIdentifiers": [
+      "street_address",
+      "phone"
+    ],
+    "sectoralRegimes": [],
+    "rateLimitPerHour": 30,
+    "provenance": "cppa-registry:2026-10-26"
+  },
+  {
+    "id": "relx",
+    "name": "RELX Inc.",
+    "domains": [
+      "lexisnexis.com"
+    ],
+    "category": "risk_mitigation",
+    "surface": "private",
+    "establishedIn": "US-NC",
+    "targetsRegions": [
+      "US",
+      "US-CA"
+    ],
+    "legalContact": {
+      "email": "privacy.inquiries@lexisnexis.com",
+      "privacyPortal": "https://www.lexisnexis.com/global/privacy/en/privacy-center-us.page",
+      "postal": "1801 Varsity Dr., Raleigh, NC"
+    },
+    "severity": 4,
+    "medianResponseDays": 6,
+    "requiredIdentifiers": [],
+    "sectoralRegimes": [],
+    "rateLimitPerHour": 60,
+    "provenance": "cppa-registry:2026-10-26"
+  },
+  {
+    "id": "rocketreach",
+    "name": "RocketReach LLC",
+    "domains": [
+      "rocketreach.co"
+    ],
+    "category": "marketing",
+    "surface": "private",
+    "establishedIn": "US-NY",
+    "targetsRegions": [
+      "US",
+      "US-CA"
+    ],
+    "legalContact": {
+      "email": "privacy@rocketreach.co",
+      "privacyPortal": "https://rocketreach.co/privacy",
+      "postal": "144 N 7th St PO BOX 421, Brooklyn, NY"
+    },
+    "severity": 4,
+    "medianResponseDays": 4,
+    "requiredIdentifiers": [],
+    "sectoralRegimes": [],
+    "rateLimitPerHour": 60,
+    "provenance": "cppa-registry:2026-10-26"
+  },
+  {
+    "id": "scalable-commerce",
+    "name": "Scalable Commerce LLC",
+    "domains": [
+      "kidslivesafe.com",
+      "quickpublicrecords.com"
+    ],
+    "category": "people_search",
+    "surface": "public",
+    "establishedIn": "US-CA",
+    "targetsRegions": [
+      "US",
+      "US-CA"
+    ],
+    "legalContact": {
+      "email": "privacyinfo@kidslivesafe.com",
+      "privacyPortal": "https://www.kidslivesafe.com/help-center/privacy; https://www.kidslivesafe.com/help-center/privacy-requests; https://www.quickpublicrecords.com/help-center/privacy; https://www.quickpublicrecords.com/help-center/privacy-requests",
+      "postal": "3905 State St #7228, Santa Barbara, CA"
+    },
+    "severity": 7,
+    "medianResponseDays": 3,
+    "requiredIdentifiers": [
+      "street_address",
+      "phone"
+    ],
+    "sectoralRegimes": [],
+    "rateLimitPerHour": 30,
+    "provenance": "cppa-registry:2026-10-26"
+  },
+  {
+    "id": "similarweb",
+    "name": "Similarweb Ltd.",
+    "domains": [
+      "similarweb.com"
+    ],
+    "category": "marketing",
+    "surface": "private",
+    "establishedIn": "US",
+    "targetsRegions": [
+      "US",
+      "US-CA"
+    ],
+    "legalContact": {
+      "email": "legal@similarweb.com",
+      "privacyPortal": "https://similarweb.com/",
+      "postal": "33 Yitzhak Rabin Road, Givatayim, NA"
+    },
+    "severity": 8,
+    "medianResponseDays": 0,
+    "requiredIdentifiers": [
+      "date_of_birth"
+    ],
+    "sectoralRegimes": [],
+    "rateLimitPerHour": 60,
+    "provenance": "cppa-registry:2026-10-26"
+  },
+  {
+    "id": "spokeo",
+    "name": "Spokeo, Inc.",
+    "domains": [
+      "spokeo.com",
+      "freepeopledirectory.com",
+      "thatsthem.com",
+      "peoplewin.com",
+      "anywho.com",
+      "family.me"
+    ],
+    "category": "people_search",
+    "surface": "public",
+    "establishedIn": "US-CA",
+    "targetsRegions": [
+      "US",
+      "US-CA"
+    ],
+    "legalContact": {
+      "email": "jmatthes@spokeo.com",
+      "privacyPortal": "https://www.spokeo.com/privacy-policy; https://www.spokeo.com/privacy/control/all-categories",
+      "postal": "199 S. Los Robles Ave Ste 711, Pasadena, CA"
+    },
+    "severity": 6,
+    "medianResponseDays": 1,
+    "requiredIdentifiers": [
+      "street_address",
+      "phone",
+      "date_of_birth"
+    ],
+    "sectoralRegimes": [
+      "GLBA"
+    ],
+    "rateLimitPerHour": 30,
+    "provenance": "cppa-registry:2026-10-26"
+  },
+  {
+    "id": "spycloud",
+    "name": "SpyCloud Inc.",
+    "domains": [
+      "spycloud.com"
+    ],
+    "category": "location",
+    "surface": "private",
+    "establishedIn": "US-TX",
+    "targetsRegions": [
+      "US",
+      "US-CA"
+    ],
+    "legalContact": {
+      "email": "privacy@spycloud.com",
+      "privacyPortal": "https://spycloud.com/legal/privacy-policy/; https://spycloud.com/legal/dsar/",
+      "postal": "2130 S. Congress Ave., Austin, TX"
+    },
+    "severity": 8,
+    "medianResponseDays": 0,
+    "requiredIdentifiers": [
+      "date_of_birth"
+    ],
+    "sectoralRegimes": [],
+    "rateLimitPerHour": 60,
+    "provenance": "cppa-registry:2026-10-26"
+  },
+  {
+    "id": "sterling-data",
+    "name": "Sterling Data Company LLC",
+    "domains": [
+      "sterling.ai"
+    ],
+    "category": "recruitment",
+    "surface": "private",
+    "establishedIn": "US-DE",
+    "targetsRegions": [
+      "US",
+      "US-CA"
+    ],
+    "legalContact": {
+      "email": "privacy@sterling.ai",
+      "privacyPortal": "sterling.ai",
+      "postal": "8 The Green, Dover, DE"
+    },
+    "severity": 2,
+    "medianResponseDays": 15,
+    "requiredIdentifiers": [
+      "street_address",
+      "date_of_birth"
+    ],
+    "sectoralRegimes": [],
+    "rateLimitPerHour": 60,
+    "provenance": "cppa-registry:2026-10-26"
+  },
+  {
+    "id": "tauxbe-data",
+    "name": "Tauxbe Data Inc.",
+    "domains": [
+      "tauxbe.com",
+      "natcrim.com"
+    ],
+    "category": "recruitment",
+    "surface": "private",
+    "establishedIn": "US-NC",
+    "targetsRegions": [
+      "US",
+      "US-CA"
+    ],
+    "legalContact": {
+      "email": "sourcing@tauxbe.com",
+      "privacyPortal": "https://www.tauxbe.com/privacy-policy",
+      "postal": "106 S Main St, Mount Holly, NC"
+    },
+    "severity": 4,
+    "medianResponseDays": 0,
+    "requiredIdentifiers": [
+      "street_address",
+      "date_of_birth"
+    ],
+    "sectoralRegimes": [
+      "FCRA"
+    ],
+    "rateLimitPerHour": 60,
+    "provenance": "cppa-registry:2026-10-26"
+  },
+  {
+    "id": "the-people-searchers",
+    "name": "The People Searchers LLC",
+    "domains": [
+      "peoplesearcher.com",
+      "secretinfo.org",
+      "peopesearcher.cm"
+    ],
+    "category": "people_search",
+    "surface": "public",
+    "establishedIn": "US-FL",
+    "targetsRegions": [
+      "US",
+      "US-CA"
+    ],
+    "legalContact": {
+      "email": "support@peoplesearcher.com",
+      "privacyPortal": "http://peopesearcher.cm; http://www.secretinfo.org",
+      "postal": "4781 N Congress Ave #2135, Boynton Beach, FL"
+    },
+    "severity": 5,
+    "medianResponseDays": 1,
+    "requiredIdentifiers": [
+      "street_address",
+      "phone"
+    ],
+    "sectoralRegimes": [],
+    "rateLimitPerHour": 30,
+    "provenance": "cppa-registry:2026-10-26"
+  },
+  {
+    "id": "transunion-interactive",
+    "name": "TransUnion Interactive, Inc.",
+    "domains": [
+      "transunion.com"
+    ],
+    "category": "financial",
+    "surface": "private",
+    "establishedIn": "US-IL",
+    "targetsRegions": [
+      "US",
+      "US-CA"
+    ],
+    "legalContact": {
+      "email": "privacy@transunion.com",
+      "privacyPortal": "www.transunion.com",
+      "postal": "555 W Adams St, Chicago, IL"
+    },
+    "severity": 9,
+    "medianResponseDays": 41,
+    "requiredIdentifiers": [
+      "street_address",
+      "date_of_birth"
+    ],
+    "sectoralRegimes": [],
+    "rateLimitPerHour": 60,
+    "provenance": "cppa-registry:2026-10-26"
+  },
+  {
+    "id": "transunion-risk-and-alternative-data",
+    "name": "TransUnion Risk and Alternative Data Solutions, Inc.",
+    "domains": [
+      "transunion.com"
+    ],
+    "category": "financial",
+    "surface": "private",
+    "establishedIn": "US-IL",
+    "targetsRegions": [
+      "US",
+      "US-CA"
+    ],
+    "legalContact": {
+      "email": "privacy@transunion.com",
+      "privacyPortal": "www.transunion.com",
+      "postal": "555 W Adams St, Chicago, IL"
+    },
+    "severity": 10,
+    "medianResponseDays": 41,
+    "requiredIdentifiers": [
+      "street_address",
+      "date_of_birth"
+    ],
+    "sectoralRegimes": [],
+    "rateLimitPerHour": 60,
+    "provenance": "cppa-registry:2026-10-26"
+  },
+  {
+    "id": "truth-now",
+    "name": "Truth Now LLC",
+    "domains": [
+      "checksecrets.com",
+      "peoplesearchusa.org",
+      "inmatesearcher.com",
+      "sealedrecords.net"
+    ],
+    "category": "people_search",
+    "surface": "public",
+    "establishedIn": "US-CA",
+    "targetsRegions": [
+      "US",
+      "US-CA"
+    ],
+    "legalContact": {
+      "email": "support@checksecrets.com",
+      "privacyPortal": "checksecrets.com; peoplesearchUSA.org; inmatesearcher.com; sealedrecords.net",
+      "postal": "3746 Foothill Blvd 7060, Glendale, CA"
+    },
+    "severity": 5,
+    "medianResponseDays": 1,
+    "requiredIdentifiers": [
+      "street_address",
+      "phone"
+    ],
+    "sectoralRegimes": [],
+    "rateLimitPerHour": 30,
+    "provenance": "cppa-registry:2026-10-26"
+  },
+  {
+    "id": "truthfinder",
+    "name": "TruthFinder, LLC",
+    "domains": [
+      "truthfinder.com",
+      "courthousedirectory.us",
+      "getfullreport.com",
+      "unitedstatesbackgroundchecks.com",
+      "courtlocations.com",
+      "locaterecord.net",
+      "recordlocator.net",
+      "backgroundchecks.us"
+    ],
+    "category": "people_search",
+    "surface": "public",
+    "establishedIn": "US-CA",
+    "targetsRegions": [
+      "US",
+      "US-CA"
+    ],
+    "legalContact": {
+      "email": "legal@peopleconnect.us",
+      "privacyPortal": "https://www.truthfinder.com/privacy-center/",
+      "postal": "375 Camino De La Reina, Ste. 400, San Diego, CA"
+    },
+    "severity": 5,
+    "medianResponseDays": 1,
+    "requiredIdentifiers": [
+      "street_address",
+      "phone"
+    ],
+    "sectoralRegimes": [],
+    "rateLimitPerHour": 30,
+    "provenance": "cppa-registry:2026-10-26"
+  },
+  {
+    "id": "vi-technologies",
+    "name": "Vi Technologies, Inc.",
+    "domains": [
+      "vi.co"
+    ],
+    "category": "health",
+    "surface": "private",
+    "establishedIn": "US-NY",
+    "targetsRegions": [
+      "US",
+      "US-CA"
+    ],
+    "legalContact": {
+      "email": "privacy@vi.co",
+      "privacyPortal": "www.vi.co",
+      "postal": "110 East 25th Street, Suite, New York, NY"
+    },
+    "severity": 8,
+    "medianResponseDays": 0,
+    "requiredIdentifiers": [],
+    "sectoralRegimes": [
+      "HIPAA"
+    ],
+    "rateLimitPerHour": 60,
+    "provenance": "cppa-registry:2026-10-26"
+  },
+  {
+    "id": "west-publishing",
+    "name": "West Publishing Corp",
+    "domains": [
+      "thomsonreuters.com"
+    ],
+    "category": "risk_mitigation",
+    "surface": "private",
+    "establishedIn": "US-MN",
+    "targetsRegions": [
+      "US",
+      "US-CA"
+    ],
+    "legalContact": {
+      "email": "privacy.enquiries@thomsonreuters.com",
+      "privacyPortal": "https://www.thomsonreuters.com/en/privacy-statement",
+      "postal": "2900 Ames Crossing Rd, Eagan, MN"
+    },
+    "severity": 7,
+    "medianResponseDays": 29,
+    "requiredIdentifiers": [
+      "date_of_birth"
+    ],
+    "sectoralRegimes": [
+      "GLBA"
+    ],
+    "rateLimitPerHour": 60,
+    "provenance": "cppa-registry:2026-10-26"
+  },
+  {
+    "id": "whitepages",
+    "name": "Whitepages, Inc",
+    "domains": [
+      "whitepages.com"
+    ],
+    "category": "people_search",
+    "surface": "public",
+    "establishedIn": "US-WA",
+    "targetsRegions": [
+      "US",
+      "US-CA"
+    ],
+    "legalContact": {
+      "email": "legal@whitepages.com",
+      "privacyPortal": "https://www.whitepages.com/privacy; https://www.whitepages.com/privacy/consumer-rights",
+      "postal": "2033 6th Ave, Suite 1100, Seattle, WA"
+    },
+    "severity": 5,
+    "medianResponseDays": 1,
+    "requiredIdentifiers": [
+      "street_address",
+      "phone"
+    ],
+    "sectoralRegimes": [],
+    "rateLimitPerHour": 30,
+    "provenance": "cppa-registry:2026-10-26"
+  },
+  {
+    "id": "ziff-davis",
+    "name": "Ziff Davis LLC",
+    "domains": [
+      "ziffdavis.com"
+    ],
+    "category": "location",
+    "surface": "private",
+    "establishedIn": "US-NY",
+    "targetsRegions": [
+      "US",
+      "US-CA"
+    ],
+    "legalContact": {
+      "email": "legal@ziffdavis.com",
+      "privacyPortal": "https://www.ziffdavis.com",
+      "postal": "360 Park Ave South, Floor 17, New York, NY"
+    },
+    "severity": 7,
+    "medianResponseDays": 7,
+    "requiredIdentifiers": [],
+    "sectoralRegimes": [],
+    "rateLimitPerHour": 60,
+    "provenance": "cppa-registry:2026-10-26"
+  }
+]

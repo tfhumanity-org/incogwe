@@ -1,0 +1,12 @@
+From: MAILER-DAEMON@mx.example.net
+To: deletions+thr_bnc00001@deletewe.invalid
+Subject: Undeliverable: Consumer request to delete
+X-Failed-Recipients: privacy@defunct-broker.example
+Auto-Submitted: auto-replied
+
+This is the mail system at host mx.example.net.
+
+Your message could not be delivered to one or more recipients.
+
+<privacy@defunct-broker.example>: host mx.defunct-broker.example said:
+    550 5.1.1 Recipient address rejected: user unknown
