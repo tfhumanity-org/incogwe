@@ -194,7 +194,42 @@ document unpublishable. Record the limitation; it is more honest and it costs no
 
 ---
 
-## 12. Shipping a live transport is a one-line mistake away
+## 12. A redactor that corrupts the identifiers it is meant to preserve
+
+**What happened.** Spotted by a human reading real `npm test` output, not by any test:
+
+```
+"replyId":"reply_518b761bphone:e5121b6dec92b"
+```
+
+`scrub()` applies a phone-number pattern to every string. Random hex ids routinely
+contain six or more consecutive digits, so the pattern matched *inside* the token and
+rewrote it. The log's `replyId` no longer matched the database's, which destroys the
+one property the redactor exists to provide — correlate a log line to a record without
+revealing who it is about. And it failed silently: the line still looked like a log line.
+
+**Fix.** Two changes in `src/util/redact.ts`. The phone pattern gained
+`(?<![A-Za-z0-9_])` / `(?![A-Za-z0-9_])` boundaries — a real phone number is never
+flanked by letters or an underscore, so the boundary costs nothing. And strings matching
+`OPAQUE_ID_RE` (`^[a-z][a-z0-9]*_[A-Za-z0-9-]{6,}$`) are passed through untouched.
+Regression tests pin the exact mangled ids from the run that exposed it, alongside tests
+that real phone numbers in several formats are still caught.
+
+**Generalise, twice.**
+
+*On the bug:* a scrubber is a rewriter, and every rewriter needs a test for what it must
+**not** touch, not only for what it must. We had five tests that personal data was
+removed and none that anything else survived.
+
+*On how it was found:* our tests asserted the logger does not leak a name. They never
+asserted the log is still useful. Every test passed while the output was quietly being
+corrupted, and it took a person scrolling past a successful test run to notice. When
+output is for humans, read it — a green suite is evidence about the assertions you
+thought to write, and nothing else.
+
+---
+
+## 13. Shipping a live transport is a one-line mistake away
 
 **What we avoided.** An SMTP client is ten lines. With one in the repo, sending
 unreviewed draft legal letters to real companies in a real person's name is a config

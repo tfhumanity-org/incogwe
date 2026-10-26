@@ -12,8 +12,29 @@ import { createHmac, randomBytes } from 'node:crypto';
 const SESSION_SALT = randomBytes(16);
 
 const EMAIL_RE = /[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/gi;
-const PHONE_RE = /(?:\+\d{1,3}[\s.-]?)?(?:\(\d{2,4}\)[\s.-]?)?\d{3,4}[\s.-]?\d{3,4}(?:[\s.-]?\d{2,4})?/g;
+
+/**
+ * A phone-like run of digits.
+ *
+ * The lookarounds are load-bearing. Without them this matches digit runs *inside*
+ * opaque identifiers -- `reply_518b761b2847391c` contains eight consecutive digits --
+ * and rewrites them mid-token, producing `reply_518b761bphone:e5121b6d`. That is
+ * worse than useless: the identifier in the log no longer matches the one in the
+ * database, so the correlation this module exists to preserve is destroyed, and the
+ * mangling is silent. A real phone number is never flanked by letters or by an
+ * underscore, so requiring a non-alphanumeric boundary costs nothing and stops it.
+ */
+const PHONE_RE =
+  /(?<![A-Za-z0-9_])(?:\+\d{1,3}[\s.-]?)?(?:\(\d{2,4}\)[\s.-]?)?\d{3,4}[\s.-]?\d{3,4}(?:[\s.-]?\d{2,4})?(?![A-Za-z0-9_])/g;
+
 const DOB_RE = /\b\d{4}-\d{2}-\d{2}\b|\b\d{1,2}\/\d{1,2}\/\d{4}\b/g;
+
+/**
+ * Opaque identifiers we mint ourselves (`req_`, `subj_`, `thr_`, `reply_`, ...).
+ * They carry no personal data, and they are the primary debugging handle, so they
+ * are passed through untouched rather than risking a partial match inside them.
+ */
+const OPAQUE_ID_RE = /^[a-z][a-z0-9]*_[A-Za-z0-9-]{6,}$/;
 
 /** Stable pseudonym for a value, e.g. `pii:9f2a41c8`. */
 export function pseudonym(value: string, kind = 'pii'): string {
@@ -23,6 +44,7 @@ export function pseudonym(value: string, kind = 'pii'): string {
 
 /** Scrub free text of the obvious direct identifiers. Defence in depth, not the primary control. */
 export function scrub(text: string): string {
+  if (OPAQUE_ID_RE.test(text)) return text;
   return text
     .replace(EMAIL_RE, (m) => pseudonym(m, 'email'))
     .replace(DOB_RE, (m) => pseudonym(m, 'date'))

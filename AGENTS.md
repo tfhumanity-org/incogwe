@@ -37,6 +37,7 @@ These are enforced in code and in tests. Do not weaken them to make something pa
 | **No live transport ships** | `transportFromEnv`, `TemplatesNotReviewedError` | Draft legal letters must not be one config change away from real companies |
 | **Minimum PII per broker** | `minimise()` + `Broker.requiredIdentifiers` | Collect per-flow, not per-account |
 | **No personal data in logs** | `log.*` always passes fields through `redact()`; no escape hatch | A log aggregator is a second copy of the thing the user hired us to reduce |
+| **Redaction must not corrupt opaque ids** | `OPAQUE_ID_RE` + boundary-anchored patterns in `redact.ts` | A mangled `replyId` silently breaks log-to-record correlation — see [pitfalls #12](docs/playbook/pitfalls.md) |
 | **Personal data encrypted at rest** | `seal()`/`open()`, AES-256-GCM, AAD bound to `table:column:row` | A ciphertext cannot be moved between rows |
 | **Deletion is real** | `Store.deleteSubject` removes rows | A flag is not erasure |
 | **No network in tests** | `MockTransport` has no socket | CI must never produce live broker traffic |

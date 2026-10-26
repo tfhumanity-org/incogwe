@@ -124,6 +124,41 @@ describe('personal data stays out of logs', () => {
     assert.notEqual(pseudonym('a@x.io'), pseudonym('b@x.io'));
   });
 
+  test('opaque identifiers survive redaction intact', () => {
+    // Regression: random hex ids routinely contain 6+ consecutive digits, which the
+    // phone pattern used to match mid-token and rewrite, e.g.
+    //   reply_518b761b2847391c  ->  reply_518b761bphone:e5121b6d
+    // That silently breaks the correlation between a log line and the database row.
+    const realIds = [
+      'reply_518b761b28473916dec92b',
+      'reply_55af555a0e4a65bbb4d3edcaf',
+      'reply_c62067a001fc5437425ff20e9',
+      'reply_9da62b3c12047fa1982b29403',
+      'reply_49afc14bc07f1234567d2eb9c7a',
+      'req_c73323c0b6194521bd4028e5',
+      'subj_8e42160a60844cb3afac2362',
+      'thr_0123456789abcdef',
+      'acct_12d05d91cb47470bb3f47772',
+    ];
+    for (const id of realIds) {
+      assert.equal(scrub(id), id, `${id} was mangled`);
+      assert.equal((redact({ replyId: id }) as Record<string, unknown>)['replyId'], id);
+    }
+  });
+
+  test('a digit run embedded in a word is not mistaken for a phone number', () => {
+    assert.equal(scrub('order1234567ref'), 'order1234567ref');
+    assert.equal(scrub('v1_98765432'), 'v1_98765432');
+  });
+
+  test('a real phone number is still caught despite the boundary rule', () => {
+    for (const phone of ['+1 510 555 0147', '(0113) 496 0000', '020 7946 0958', '5105550147']) {
+      const out = scrub(`call ${phone} today`);
+      assert.ok(!out.includes(phone), `${phone} leaked`);
+      assert.match(out, /phone:[0-9a-f]{8}/);
+    }
+  });
+
   test('free text is scrubbed of emails, phones and dates', () => {
     const out = scrub('contact avery@example.org or +1 510 555 0147, born 1986-04-12');
     assert.ok(!out.includes('avery@example.org'));
