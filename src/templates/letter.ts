@@ -14,6 +14,7 @@ import { dueDate } from '../legal/deadlines.ts';
 import { render, tidy } from './render.ts';
 import { PARTIALS, templateFor } from './registry.ts';
 import { assertConsent } from '../consent/consent.ts';
+import { assertValidIdentifiers } from '../identifiers.ts';
 import { sha256 } from '../util/ids.ts';
 
 export interface LetterContext {
@@ -47,7 +48,12 @@ export function composeLetter(ctx: LetterContext): Letter {
   // Gate 1: consent. Throws ConsentRequiredError.
   assertConsent(consent, subject, 'erasure_requests', ctx.sentAt);
 
-  // Gate 2: a modelled statutory route must exist.
+  // Gate 2: usable identifiers. These are rendered verbatim into a letter sent to a
+  // real company, so a placeholder profile must never reach one. Checked here rather
+  // than only at ingest, because this is the one function every letter passes through.
+  assertValidIdentifiers(subject.identifiers, { now: ctx.sentAt });
+
+  // Gate 3: a modelled statutory route must exist.
   const primary = entitlements[0];
   if (!primary) {
     throw new NoEntitlementError(
@@ -55,7 +61,7 @@ export function composeLetter(ctx: LetterContext): Letter {
     );
   }
 
-  // Gate 3: somewhere to send it.
+  // Gate 4: somewhere to send it.
   const to = broker.legalContact.email ?? broker.legalContact.privacyPortal;
   if (!to) throw new NoContactError(`broker ${broker.id} has no legal contact`);
 

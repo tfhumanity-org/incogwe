@@ -25,6 +25,7 @@ import { ingest, parseEml } from './mailbox/inbound.ts';
 import { processReply } from './mailbox/process.ts';
 import { readFileSync } from 'node:fs';
 import { log, setLevel } from './util/logging.ts';
+import { InvalidIdentifiersError } from './identifiers.ts';
 import type { ConsentScope, SubjectIdentifiers } from './types.ts';
 
 const AGENT_NAME = process.env.DELETEWE_AGENT_NAME ?? 'deletewe (authorised agent)';
@@ -325,4 +326,15 @@ function scopesFrom(args: string[]): ConsentScope[] {
 
 main(process.argv.slice(2))
   .then((code) => { if (code !== 0) process.exitCode = code; })
-  .catch((e) => { console.error(`error: ${(e as Error).message}`); process.exitCode = 1; });
+  .catch((e) => {
+    if (e instanceof InvalidIdentifiersError) {
+      console.error('Cannot create this profile. These details are rendered verbatim into');
+      console.error('legal letters sent to real companies, so they have to be real:\n');
+      for (const p of e.problems) console.error(`  - ${p}`);
+      console.error('\nFix the arguments and run the command again.');
+      process.exitCode = 2;
+      return;
+    }
+    console.error(`error: ${(e as Error).message}`);
+    process.exitCode = 1;
+  });

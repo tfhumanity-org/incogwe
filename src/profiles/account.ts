@@ -10,6 +10,7 @@
 import type { Account, ConsentScope, RegionCode, Subject, SubjectIdentifiers } from '../types.ts';
 import type { Store } from '../store/store.ts';
 import { grantConsent, revokeConsent } from '../consent/consent.ts';
+import { assertValidIdentifiers } from '../identifiers.ts';
 import { hashObject, newId, sha256 } from '../util/ids.ts';
 import { addDays } from '../util/clock.ts';
 import { log } from '../util/logging.ts';
@@ -32,6 +33,7 @@ export interface Invite {
 
 export function createAccount(ownerIdentifiers: SubjectIdentifiers, residence: RegionCode,
   plan: Account['plan'], now: Date): { account: Account; owner: Subject } {
+  assertValidIdentifiers(ownerIdentifiers, { now });
   const accountId = newId('acct');
   const owner: Subject = {
     id: newId('subj'), accountId, residence, identifiers: ownerIdentifiers, createdAt: now.toISOString(),
@@ -88,6 +90,11 @@ export function acceptInvite(store: Store, input: AcceptInviteInput): Subject {
   if (used >= account.maxSubjects) {
     throw new SeatLimitError(`account ${invite.accountId} is full (${used}/${account.maxSubjects})`);
   }
+
+  // Reject before the profile or its consent record exists. A half-created member
+  // that can never send is worse than a clear error: it holds personal data for
+  // nothing, and it looks like a working seat on the dashboard.
+  assertValidIdentifiers(input.identifiers, { now });
 
   const subject: Subject = {
     id: newId('subj'),

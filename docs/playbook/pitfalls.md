@@ -229,7 +229,54 @@ thought to write, and nothing else.
 
 ---
 
-## 13. Shipping a live transport is a one-line mistake away
+## 13. No validation on the data that becomes a legal letter
+
+**What happened.** Found the same way as #12 — a human running the README's own quick
+start, pasting the placeholders literally:
+
+```
+$ deletewe account:create --name "..." --locality "..." --email ...
+account acct_12d05d91cb47470bb3f47772
+owner subject subj_8e42160a60844cb3afac2362
+```
+
+It worked. A subject existed, consent was recorded against it, and `send` would have
+rendered `Full name: ...` into a letter addressed to Equifax. Nothing in 173 tests
+objected, because every test used a well-formed fixture.
+
+This is not a cosmetic input-validation miss. These fields are rendered verbatim into a
+statutory request. A nonsense letter wastes a compliance team's time, and it makes the
+next *genuine* letter from the same sender easier to bin.
+
+**Fix.** `src/identifiers.ts`, enforced at two depths: `validateIdentifiers` at ingest
+(`createAccount`, `acceptInvite`, the CLI) so the error arrives where it can be fixed,
+and `assertValidIdentifiers` inside `composeLetter` — the one function every letter
+passes through — so no future code path can route around it. The CLI prints every
+problem at once rather than one per attempt.
+
+While writing it, a second gap appeared: with a date of birth supplied, nothing checked
+the subject was an adult. The authorisation text the subject signs already asserts
+"I am an adult", so the engine was relying on a claim it never verified against data it
+already held. It now refuses, and says why.
+
+**And the fix had its own bug**, caught by its own test: `isPlaceholder` used
+`/[a-z0-9]/i` to mean "contains something real", which classifies 山田 太郎, محمد العلي
+and 김민준 as placeholders. A validator that rejects most of the world's names is worse
+than no validator. Now `/[\p{L}\p{N}]/u`.
+
+**Generalise.** *Validate at the boundary where data becomes consequential, not where it
+is convenient. And when the consequence is external and irreversible — a letter to a
+company, a payment, a published post — the validator belongs at the same narrow waist as
+the safety checks, because it is one. Third time in this file that the answer was
+"put it where `composeLetter` already is": see #9 and #12.*
+
+*Corollary on character classes: `[a-z]` in a validator is a bug about people. If a
+rule decides whether a human's name is real, it must be Unicode-aware, and it must be
+tested against names that are not Latin.*
+
+---
+
+## 14. Shipping a live transport is a one-line mistake away
 
 **What we avoided.** An SMTP client is ten lines. With one in the repo, sending
 unreviewed draft legal letters to real companies in a real person's name is a config

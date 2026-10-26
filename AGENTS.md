@@ -36,6 +36,7 @@ These are enforced in code and in tests. Do not weaken them to make something pa
 | **One adult cannot consent for another** | `ConsentRequiredError` on subject mismatch | A family-plan owner's signature authorises nothing for another adult, under GDPR or CCPA |
 | **No live transport ships** | `transportFromEnv`, `TemplatesNotReviewedError` | Draft legal letters must not be one config change away from real companies |
 | **Minimum PII per broker** | `minimise()` + `Broker.requiredIdentifiers` | Collect per-flow, not per-account |
+| **Identifiers must be real, and adult** | `assertValidIdentifiers()` at ingest and inside `composeLetter()` | They are rendered verbatim into a statutory letter; an agent cannot be authorised by a child |
 | **No personal data in logs** | `log.*` always passes fields through `redact()`; no escape hatch | A log aggregator is a second copy of the thing the user hired us to reduce |
 | **Redaction must not corrupt opaque ids** | `OPAQUE_ID_RE` + boundary-anchored patterns in `redact.ts` | A mangled `replyId` silently breaks log-to-record correlation — see [pitfalls #12](docs/playbook/pitfalls.md) |
 | **Personal data encrypted at rest** | `seal()`/`open()`, AES-256-GCM, AAD bound to `table:column:row` | A ciphertext cannot be moved between rows |

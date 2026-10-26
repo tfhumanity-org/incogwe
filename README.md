@@ -65,9 +65,14 @@ alias deletewe='node --experimental-strip-types src/cli.ts'
 deletewe consent:text --residence US-CA
 
 # 3. Create an account. This records your own authorisation.
+#    Use real details: they are rendered verbatim into legal letters, and the
+#    CLI rejects placeholders and under-18 dates of birth.
 deletewe account:create \
   --name "Avery Nakamura" --locality "Oakland, California" \
   --residence US-CA --email avery@example.org
+
+#    The commands below take the subject id that step 3 printed. Substitute it;
+#    `subj_...` is not a wildcard.
 
 # 4. See what would be sent, and to whom, under which law. Sends nothing.
 deletewe plan --subject subj_... --limit 10
