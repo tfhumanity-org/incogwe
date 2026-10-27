@@ -168,7 +168,7 @@ describe('the gates', () => {
     const invite = createInvite(store, account.id, T0);
 
     assert.throws(() => acceptInvite(store, {
-      invite, presentedToken: invite.token,
+      presentedToken: invite.token,
       identifiers: { fullName: 'test', emails: ['x'], locality: '' },
       residence: 'US-CA', signatureName: 'test', scopes: ['erasure_requests'],
       agentName: 'a', now: T0,
@@ -186,7 +186,7 @@ describe('the gates', () => {
     const invite = createInvite(store, account.id, T0);
 
     assert.throws(() => acceptInvite(store, {
-      invite, presentedToken: invite.token,
+      presentedToken: invite.token,
       identifiers: ids({ fullName: 'Sam Nakamura', dateOfBirth: '2015-06-01' }),
       residence: 'US-CA', signatureName: 'Sam Nakamura', scopes: ['erasure_requests'],
       agentName: 'a', now: T0,

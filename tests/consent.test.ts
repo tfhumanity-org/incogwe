@@ -97,12 +97,24 @@ describe('the consent hash chain', () => {
     assert.equal(verifyConsentChain([a, rogue, b]), false);
   });
 
-  test('revocation re-hashes, so a revoked record still verifies on its own terms', () => {
+  test('revocation appends rather than editing, so the chain stays verifiable', () => {
     const a = grantConsent(base);
     const r = revokeConsent(a, addDays(T0, 5));
-    assert.equal(verifyConsentChain([r]), true);
+    assert.equal(verifyConsentChain([a, r]), true);
     assert.ok(r.revokedAt);
-    assert.notEqual(r.entryHash, a.entryHash);
+    assert.notEqual(r.id, a.id, 'a new entry, not a rewrite of the old one');
+    assert.equal(r.previousHash, a.entryHash);
+    assert.equal(a.revokedAt, null, 'the original record is left exactly as signed');
+  });
+
+  test('revoking an earlier grant does not invalidate the entries after it', () => {
+    // Rewriting a record in place re-hashed it, so the next entry's previousHash
+    // no longer matched and the whole chain reported INVALID -- punishing a subject
+    // for exercising the right to withdraw.
+    const a = grantConsent(base);
+    const b = grantConsent({ ...base, now: addDays(T0, 1), previousHash: a.entryHash });
+    const r = revokeConsent(b, addDays(T0, 5), b.entryHash);
+    assert.equal(verifyConsentChain([a, b, r]), true);
   });
 });
 
@@ -119,7 +131,7 @@ describe('family accounts: every adult signs their own authorisation', () => {
 
     const invite = createInvite(store, account.id, T0);
     const member = acceptInvite(store, {
-      invite, presentedToken: invite.token,
+      presentedToken: invite.token,
       identifiers: ids({ fullName: 'Jordan Ellis', emails: ['jordan@example.org'] }),
       residence: 'GB', signatureName: 'Jordan Ellis',
       scopes: ['erasure_requests'], agentName: 'deletewe test', now: T0,
@@ -165,12 +177,12 @@ describe('family accounts: every adult signs their own authorisation', () => {
     const invite = createInvite(store, account.id, T0);
 
     assert.throws(() => acceptInvite(store, {
-      invite, presentedToken: 'wrong-token', identifiers: ids(), residence: 'US-CA',
+      presentedToken: 'wrong-token', identifiers: ids(), residence: 'US-CA',
       signatureName: 'X', scopes: ['erasure_requests'], agentName: 'a', now: T0,
     }), InviteError);
 
     assert.throws(() => acceptInvite(store, {
-      invite, presentedToken: invite.token, identifiers: ids(), residence: 'US-CA',
+      presentedToken: invite.token, identifiers: ids(), residence: 'US-CA',
       signatureName: 'X', scopes: ['erasure_requests'], agentName: 'a', now: addDays(T0, 2),
     }), /expired/);
     store.close();
@@ -190,7 +202,7 @@ describe('family accounts: every adult signs their own authorisation', () => {
     store.putAccount(account); store.putSubject(owner);
     const invite = createInvite(store, account.id, T0);
     const member = acceptInvite(store, {
-      invite, presentedToken: invite.token, identifiers: ids({ fullName: 'Jordan Ellis' }),
+      presentedToken: invite.token, identifiers: ids({ fullName: 'Jordan Ellis' }),
       residence: 'US-CA', signatureName: 'Jordan Ellis', scopes: ['erasure_requests'],
       agentName: 'a', now: T0,
     });

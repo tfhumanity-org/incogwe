@@ -23,7 +23,7 @@ export interface PlannedRequest {
 
 export interface SkippedBroker {
   readonly brokerId: string;
-  readonly reason: 'no_entitlement' | 'no_contact' | 'already_open' | 'out_of_region';
+  readonly reason: 'no_entitlement' | 'no_contact' | 'already_open' | 'out_of_region' | 'not_due';
 }
 
 export interface Plan {
@@ -35,10 +35,12 @@ export interface Plan {
 export interface PlanOptions {
   readonly registry?: BrokerRegistry;
   readonly observations?: readonly Observation[];
-  /** Requests already open for this subject, so we do not duplicate. */
-  readonly existing?: readonly Pick<RemovalRequest, 'brokerId' | 'status'>[];
+  /** Requests already recorded for this subject, so we neither duplicate nor re-send early. */
+  readonly existing?: readonly Pick<RemovalRequest, 'brokerId' | 'status' | 'nextActionAt'>[];
   /** Restrict to these broker ids. */
   readonly only?: readonly string[];
+  /** Required when `existing` is supplied, to evaluate recurrence due dates. */
+  readonly now?: Date;
 }
 
 const OPEN_STATUSES = new Set(['planned', 'sent', 'acknowledged', 'awaiting_verification', 'extended', 'escalated']);
@@ -59,8 +61,24 @@ function priority(broker: Broker, observed: boolean): number {
 export function planRequests(subject: Subject, opts: PlanOptions = {}): Plan {
   const registry = opts.registry ?? new BrokerRegistry();
   const obsByBroker = new Map((opts.observations ?? []).map((o) => [o.brokerId, o]));
+  const existing = opts.existing ?? [];
+  const now = opts.now ?? new Date();
+
   const openByBroker = new Set(
-    (opts.existing ?? []).filter((r) => OPEN_STATUSES.has(r.status)).map((r) => r.brokerId),
+    existing.filter((r) => OPEN_STATUSES.has(r.status)).map((r) => r.brokerId),
+  );
+
+  /**
+   * A closed request whose next action is still in the future means this broker has
+   * been dealt with and is waiting out its 60/90-day cycle. Without this the planner
+   * re-sent to every settled broker on the next run, which is both a re-send storm
+   * and a good way to get the sending domain blocked.
+   */
+  const notDue = new Set(
+    existing
+      .filter((r) => !OPEN_STATUSES.has(r.status) && r.nextActionAt !== null
+        && new Date(r.nextActionAt).getTime() > now.getTime())
+      .map((r) => r.brokerId),
   );
 
   const candidates = opts.only
@@ -73,6 +91,10 @@ export function planRequests(subject: Subject, opts: PlanOptions = {}): Plan {
   for (const broker of candidates) {
     if (openByBroker.has(broker.id)) {
       skipped.push({ brokerId: broker.id, reason: 'already_open' });
+      continue;
+    }
+    if (notDue.has(broker.id)) {
+      skipped.push({ brokerId: broker.id, reason: 'not_due' });
       continue;
     }
     if (!broker.legalContact.email && !broker.legalContact.privacyPortal) {

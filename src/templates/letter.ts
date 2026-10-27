@@ -12,7 +12,7 @@ import { instrument } from '../legal/jurisdictions.ts';
 import { dropEligible, sectoralCaveat } from '../legal/entitlements.ts';
 import { dueDate } from '../legal/deadlines.ts';
 import { render, tidy } from './render.ts';
-import { PARTIALS, templateFor } from './registry.ts';
+import { familyFor, PARTIALS, REQUEST_ITEMS, templateFor } from './registry.ts';
 import { assertConsent } from '../consent/consent.ts';
 import { assertValidIdentifiers } from '../identifiers.ts';
 import { sha256 } from '../util/ids.ts';
@@ -132,6 +132,13 @@ export function composeLetter(ctx: LetterContext): Letter {
     fullName: ids.fullName,
   };
 
+  // Number the request list AFTER filtering, so an omitted conditional item never
+  // leaves a gap a recipient would read as a lost paragraph.
+  scope['REQUESTS'] = REQUEST_ITEMS[familyFor(primary.instrument)]
+    .filter((item) => !item.requires || Boolean(scope[item.requires]))
+    .map((item, i) => wrapItem(i + 1, item.heading, render(item.text, scope)))
+    .join('\n');
+
   const body = tidy(render(tpl.body, scope));
   const subjectLine = render(tpl.subject, scope).trim();
 
@@ -144,6 +151,23 @@ export function composeLetter(ctx: LetterContext): Letter {
     supporting,
     dueAt: due.toISOString(),
   };
+}
+
+/** `1. HEADING. text…` wrapped to 80 columns, continuation lines indented to align. */
+function wrapItem(n: number, heading: string, text: string): string {
+  const first = `${n}. ${heading}. `;
+  const words = text.replace(/\s+/g, ' ').trim().split(' ');
+  const lines: string[] = [];
+  let line = first;
+  for (const w of words) {
+    if (line.length + w.length + 1 > 80 && line.trim() !== first.trim()) {
+      lines.push(line.trimEnd());
+      line = '   ';
+    }
+    line += (line.endsWith(' ') ? '' : ' ') + w;
+  }
+  lines.push(line.trimEnd());
+  return lines.join('\n');
 }
 
 /**

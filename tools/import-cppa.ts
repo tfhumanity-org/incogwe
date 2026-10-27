@@ -240,7 +240,13 @@ function main(): void {
     .sort((a, b) => b.score - a.score);
 
   // Guarantee category spread before falling back to pure score.
+  //
+  // Keyed by registrant identity, NOT by slug. Two registrants can slug identically
+  // ("Acme LLC" and "Acme Inc" both become "acme"), and keying by slug silently
+  // dropped one of them -- while the de-duplication loop below, which iterates these
+  // values, could never observe the collision it was written to handle.
   const picked = new Map<string, Broker>();
+  let ordinal = 0;
   const perCategoryFloor: Partial<Record<BrokerCategory, number>> = {
     people_search: 12, financial: 8, health: 6, risk_mitigation: 8, recruitment: 6, location: 6, marketing: 10,
   };
@@ -249,14 +255,20 @@ function main(): void {
       if (picked.size >= limit) break;
       if (x.b.category !== cat) continue;
       if ([...picked.values()].filter((p) => p.category === cat).length >= (floor ?? 0)) break;
-      picked.set(x.b.id, x.b);
+      if (!x.b.legalContact.email && !x.b.legalContact.privacyPortal) continue;
+      picked.set(`${x.b.id}#${ordinal++}`, x.b);
     }
   }
   for (const x of scored) {
     if (picked.size >= limit) break;
-    picked.set(x.b.id, x.b);
+    // A broker with no reachable contact would make registry.validate() throw at
+    // module import, taking the whole CLI down rather than failing one request.
+    if (!x.b.legalContact.email && !x.b.legalContact.privacyPortal) continue;
+    if ([...picked.values()].some((p) => p === x.b)) continue;
+    picked.set(`${x.b.id}#${ordinal++}`, x.b);
   }
 
+  // Now that colliding slugs survive selection, suffix them so ids stay unique.
   const seen = new Map<string, number>();
   const out = [...picked.values()]
     .map((b) => {

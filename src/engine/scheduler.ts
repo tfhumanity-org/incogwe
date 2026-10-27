@@ -74,6 +74,9 @@ export class Scheduler {
       }
     }
 
+    const purged = store.purgeUnattributedReplies(now);
+    if (purged > 0) log.info('purged unattributed replies past retention', { purged });
+
     log.info('scheduler tick', { followUps, escalations, recurrences, reverifications });
     return { followUps, escalations, recurrences, reverifications, complaints, actions };
   }
@@ -135,16 +138,30 @@ export class Scheduler {
     return draft.filename;
   }
 
+  /**
+   * Mark a settled request as due for re-assertion.
+   *
+   * It stays `closed` with its outcome intact, and `nextActionAt` is cleared to mean
+   * "due now". The planner then sees no open request and no future due date for this
+   * broker, and plans a fresh one.
+   *
+   * This previously set `status: 'planned'`, which deadlocked: `decideAction` returns
+   * 'none' for a planned request, so the scheduler never looked at it again, and the
+   * planner counts 'planned' as open, so it refused to plan a replacement. The broker
+   * was parked permanently AND blocked from every future request.
+   */
   #recur(req: RemovalRequest, broker: Broker, now: Date): void {
     const store = this.#cfg.store;
     store.putRequest({
       ...req,
-      status: 'planned',           // the planner will pick it up and send afresh
-      nextActionAt: nextRecurrence(now, broker).toISOString(),
+      status: 'closed',
+      closedAt: req.closedAt ?? now.toISOString(),
+      nextActionAt: null,
       followUpCount: 0,
     });
     store.putEvent(event(req.id, now, 'recurrence_scheduled',
-      `Re-assertion due: ${broker.surface} broker on a ${broker.surface === 'public' ? 60 : 90}-day cycle.`));
+      `Re-assertion due now: ${broker.surface} broker on a ` +
+      `${broker.surface === 'public' ? 60 : 90}-day cycle. The next plan will send afresh.`));
   }
 
   #reverify(req: RemovalRequest, broker: Broker, now: Date): void {

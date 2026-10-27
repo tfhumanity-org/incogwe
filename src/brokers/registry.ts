@@ -27,25 +27,34 @@ const ALL: readonly Broker[] = Object.freeze(
   [...(generated as Broker[]), ...(curated as Broker[])].map(validate),
 );
 
-const BY_ID = new Map(ALL.map((b) => [b.id, b]));
-const BY_DOMAIN = new Map<string, Broker>();
-for (const b of ALL) for (const d of b.domains) if (!BY_DOMAIN.has(d)) BY_DOMAIN.set(d, b);
-
 export class BrokerRegistry {
   readonly #brokers: readonly Broker[];
+  readonly #byId: Map<string, Broker>;
+  readonly #byDomain: Map<string, Broker>;
 
   /**
    * Validates on construction, not only for the shipped list. A registry assembled
    * at runtime -- from an operator's own file, or in a test -- is exactly where a
    * broker with no contact or an out-of-range severity would otherwise slip through
    * and turn into an unsendable request at 3am.
+   *
+   * The lookup maps are per-instance. They were module-global, which meant an
+   * operator who built a registry from their own file to correct a broker's legal
+   * contact still got the stale shipped address back from `get()` -- and every
+   * letter went to the wrong inbox. A registry must answer only for the brokers it
+   * was given.
    */
   constructor(brokers: readonly Broker[] = ALL) {
     this.#brokers = brokers === ALL ? brokers : brokers.map(validate);
+    this.#byId = new Map(this.#brokers.map((b) => [b.id, b]));
+    this.#byDomain = new Map();
+    for (const b of this.#brokers) {
+      for (const d of b.domains) if (!this.#byDomain.has(d)) this.#byDomain.set(d, b);
+    }
   }
 
   all(): readonly Broker[] { return this.#brokers; }
-  get(id: string): Broker | undefined { return BY_ID.get(id) ?? this.#brokers.find((b) => b.id === id); }
+  get(id: string): Broker | undefined { return this.#byId.get(id); }
   count(): number { return this.#brokers.length; }
 
   byCategory(c: BrokerCategory): Broker[] { return this.#brokers.filter((b) => b.category === c); }
@@ -68,13 +77,13 @@ export class BrokerRegistry {
       host = new URL(url.includes('://') ? url : `https://${url}`).hostname.toLowerCase();
     } catch { return undefined; }
     const bare = host.replace(/^www\./, '');
-    const direct = BY_DOMAIN.get(bare);
+    const direct = this.#byDomain.get(bare);
     if (direct) return direct;
     // Match a parent domain, so sub.spokeo.com resolves to spokeo.
     const parts = bare.split('.');
     for (let i = 1; i < parts.length - 1; i++) {
       const parent = parts.slice(i).join('.');
-      const hit = BY_DOMAIN.get(parent);
+      const hit = this.#byDomain.get(parent);
       if (hit) return hit;
     }
     return undefined;

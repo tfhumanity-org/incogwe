@@ -57,7 +57,7 @@ deletewe — jurisdiction-aware personal data removal
 
   account:create --name N --locality L --residence R --email E [--plan family]
   account:invite --account ID
-  account:join --account ID --token T --name N --locality L --residence R --email E
+  account:join --token T --name N --locality L --residence R --email E
   account:seats --account ID
   account:leave --subject ID             Revoke consent and erase the subject.
 
@@ -120,8 +120,16 @@ async function main(argv: string[]): Promise<number> {
     case 'account:create': {
       const store = openStore();
       const ids = identifiersFrom(args);
-      const { account, owner } = createAccount(ids, arg(args, 'residence'),
-        flag(args, 'plan') || arg(args, 'plan', 'individual') === 'family' ? 'family' : 'individual', clock.now());
+      // `||` binds tighter than `?:`, so the obvious one-liner here read as
+      // `(flag(args,'plan') || …) ? 'family' : 'individual'` and turned an explicit
+      // `--plan individual` into a five-seat family account. Keep it explicit.
+      const planArg = arg(args, 'plan', 'individual');
+      if (planArg !== 'individual' && planArg !== 'family') {
+        console.error(`unknown --plan "${planArg}"; expected "individual" or "family"`);
+        store.close();
+        return 2;
+      }
+      const { account, owner } = createAccount(ids, arg(args, 'residence'), planArg, clock.now());
       store.putAccount(account);
       store.putSubject(owner);
       store.putConsent(grantConsent({
@@ -151,15 +159,11 @@ async function main(argv: string[]): Promise<number> {
 
     case 'account:join': {
       const store = openStore();
-      const token = arg(args, 'token');
-      const { sha256 } = await import('./util/ids.ts');
-      const { addDays } = await import('./util/clock.ts');
+      // The invitation is looked up by the hash of this token against stored state.
+      // No --account is needed or accepted: the token determines which account it
+      // belongs to, so a caller cannot nominate one.
       const subject = acceptInvite(store, {
-        invite: {
-          id: 'cli', accountId: arg(args, 'account'), token,
-          tokenHash: sha256(token), expiresAt: addDays(clock.now(), 1).toISOString(),
-        },
-        presentedToken: token,
+        presentedToken: arg(args, 'token'),
         identifiers: identifiersFrom(args),
         residence: arg(args, 'residence'),
         signatureName: arg(args, 'name'),
@@ -198,10 +202,14 @@ async function main(argv: string[]): Promise<number> {
         registry,
         observations: store.observationsFor(subject.id),
         existing: store.requestsForSubject(subject.id),
+        now: clock.now(),
       });
       const chosen = limit > 0 ? plan.requests.slice(0, limit) : plan.requests;
 
-      console.log(`planned ${plan.requests.length} requests, skipped ${plan.skipped.length}`);
+      const skipReasons = plan.skipped.reduce<Record<string, number>>(
+        (m, x) => ((m[x.reason] = (m[x.reason] ?? 0) + 1), m), {});
+      console.log(`planned ${plan.requests.length} requests, skipped ${plan.skipped.length}` +
+        (plan.skipped.length ? ` (${Object.entries(skipReasons).map(([k, v]) => `${k}: ${v}`).join(', ')})` : ''));
       for (const p of chosen.slice(0, 20)) {
         console.log(`  ${p.broker.name.slice(0, 40).padEnd(42)} ${p.entitlements[0]!.instrument.padEnd(14)} sev=${p.broker.severity}`);
       }

@@ -24,7 +24,7 @@
     ],
     "sectoralRegimes": [],
     "rateLimitPerHour": 60,
-    "provenance": "cppa-registry:2026-10-26"
+    "provenance": "cppa-registry:2026-10-27"
   },
   {
     "id": "apollo-interactive",
@@ -72,7 +72,7 @@
     "requiredIdentifiers": [],
     "sectoralRegimes": [],
     "rateLimitPerHour": 60,
-    "provenance": "cppa-registry:2026-10-26"
+    "provenance": "cppa-registry:2026-10-27"
   },
   {
     "id": "aristotle",
@@ -102,7 +102,7 @@
       "GLBA"
     ],
     "rateLimitPerHour": 60,
-    "provenance": "cppa-registry:2026-10-26"
+    "provenance": "cppa-registry:2026-10-27"
   },
   {
     "id": "autoweb",
@@ -132,7 +132,7 @@
       "FCRA"
     ],
     "rateLimitPerHour": 60,
-    "provenance": "cppa-registry:2026-10-26"
+    "provenance": "cppa-registry:2026-10-27"
   },
   {
     "id": "awl",
@@ -165,7 +165,7 @@
     "requiredIdentifiers": [],
     "sectoralRegimes": [],
     "rateLimitPerHour": 60,
-    "provenance": "cppa-registry:2026-10-26"
+    "provenance": "cppa-registry:2026-10-27"
   },
   {
     "id": "beenverified",
@@ -205,7 +205,7 @@
     ],
     "sectoralRegimes": [],
     "rateLimitPerHour": 30,
-    "provenance": "cppa-registry:2026-10-26"
+    "provenance": "cppa-registry:2026-10-27"
   },
   {
     "id": "buxton",
@@ -234,7 +234,7 @@
       "HIPAA"
     ],
     "rateLimitPerHour": 60,
-    "provenance": "cppa-registry:2026-10-26"
+    "provenance": "cppa-registry:2026-10-27"
   },
   {
     "id": "buyerlink",
@@ -264,7 +264,7 @@
       "FCRA"
     ],
     "rateLimitPerHour": 60,
-    "provenance": "cppa-registry:2026-10-26"
+    "provenance": "cppa-registry:2026-10-27"
   },
   {
     "id": "bv-insights",
@@ -291,7 +291,7 @@
       "HIPAA"
     ],
     "rateLimitPerHour": 60,
-    "provenance": "cppa-registry:2026-10-26"
+    "provenance": "cppa-registry:2026-10-27"
   },
   {
     "id": "checkpeople",
@@ -319,7 +319,7 @@
     ],
     "sectoralRegimes": [],
     "rateLimitPerHour": 30,
-    "provenance": "cppa-registry:2026-10-26"
+    "provenance": "cppa-registry:2026-10-27"
   },
   {
     "id": "choreograph",
@@ -344,7 +344,7 @@
     "requiredIdentifiers": [],
     "sectoralRegimes": [],
     "rateLimitPerHour": 60,
-    "provenance": "cppa-registry:2026-10-26"
+    "provenance": "cppa-registry:2026-10-27"
   },
   {
     "id": "civil-data-research",
@@ -372,7 +372,7 @@
     ],
     "sectoralRegimes": [],
     "rateLimitPerHour": 30,
-    "provenance": "cppa-registry:2026-10-26"
+    "provenance": "cppa-registry:2026-10-27"
   },
   {
     "id": "clearcompany",
@@ -402,7 +402,7 @@
       "FCRA"
     ],
     "rateLimitPerHour": 60,
-    "provenance": "cppa-registry:2026-10-26"
+    "provenance": "cppa-registry:2026-10-27"
   },
   {
     "id": "clearview-ai",
@@ -427,7 +427,7 @@
     "requiredIdentifiers": [],
     "sectoralRegimes": [],
     "rateLimitPerHour": 60,
-    "provenance": "cppa-registry:2026-10-26"
+    "provenance": "cppa-registry:2026-10-27"
   },
   {
     "id": "consumerbase",
@@ -454,7 +454,7 @@
       "HIPAA"
     ],
     "rateLimitPerHour": 60,
-    "provenance": "cppa-registry:2026-10-26"
+    "provenance": "cppa-registry:2026-10-27"
   },
   {
     "id": "costar-realty-information",
@@ -479,7 +479,7 @@
     "requiredIdentifiers": [],
     "sectoralRegimes": [],
     "rateLimitPerHour": 60,
-    "provenance": "cppa-registry:2026-10-26"
+    "provenance": "cppa-registry:2026-10-27"
   },
   {
     "id": "cox-automotive",
@@ -512,7 +512,7 @@
       "GLBA"
     ],
     "rateLimitPerHour": 60,
-    "provenance": "cppa-registry:2026-10-26"
+    "provenance": "cppa-registry:2026-10-27"
   },
   {
     "id": "crunchbase",
@@ -538,7 +538,7 @@
     "requiredIdentifiers": [],
     "sectoralRegimes": [],
     "rateLimitPerHour": 60,
-    "provenance": "cppa-registry:2026-10-26"
+    "provenance": "cppa-registry:2026-10-27"
   },
   {
     "id": "data-axle",
@@ -565,7 +565,7 @@
       "HIPAA"
     ],
     "rateLimitPerHour": 60,
-    "provenance": "cppa-registry:2026-10-26"
+    "provenance": "cppa-registry:2026-10-27"
   },
   {
     "id": "datalink-services",
@@ -595,7 +595,7 @@
       "FCRA"
     ],
     "rateLimitPerHour": 60,
-    "provenance": "cppa-registry:2026-10-26"
+    "provenance": "cppa-registry:2026-10-27"
   },
   {
     "id": "deloitte-consulting",
@@ -626,7 +626,7 @@
       "HIPAA"
     ],
     "rateLimitPerHour": 60,
-    "provenance": "cppa-registry:2026-10-26"
+    "provenance": "cppa-registry:2026-10-27"
   },
   {
     "id": "deloitte-financial-advisory-services",
@@ -656,7 +656,7 @@
       "HIPAA"
     ],
     "rateLimitPerHour": 60,
-    "provenance": "cppa-registry:2026-10-26"
+    "provenance": "cppa-registry:2026-10-27"
   },
   {
     "id": "dtn",
@@ -681,7 +681,7 @@
     "requiredIdentifiers": [],
     "sectoralRegimes": [],
     "rateLimitPerHour": 60,
-    "provenance": "cppa-registry:2026-10-26"
+    "provenance": "cppa-registry:2026-10-27"
   },
   {
     "id": "effyis",
@@ -706,7 +706,7 @@
     "requiredIdentifiers": [],
     "sectoralRegimes": [],
     "rateLimitPerHour": 60,
-    "provenance": "cppa-registry:2026-10-26"
+    "provenance": "cppa-registry:2026-10-27"
   },
   {
     "id": "enformion",
@@ -738,7 +738,7 @@
       "GLBA"
     ],
     "rateLimitPerHour": 60,
-    "provenance": "cppa-registry:2026-10-26"
+    "provenance": "cppa-registry:2026-10-27"
   },
   {
     "id": "epsilon-data-management",
@@ -764,7 +764,7 @@
     "requiredIdentifiers": [],
     "sectoralRegimes": [],
     "rateLimitPerHour": 60,
-    "provenance": "cppa-registry:2026-10-26"
+    "provenance": "cppa-registry:2026-10-27"
   },
   {
     "id": "equifax-information-services",
@@ -796,7 +796,7 @@
       "HIPAA"
     ],
     "rateLimitPerHour": 60,
-    "provenance": "cppa-registry:2026-10-26"
+    "provenance": "cppa-registry:2026-10-27"
   },
   {
     "id": "equifax-workforce",
@@ -827,7 +827,7 @@
       "FCRA"
     ],
     "rateLimitPerHour": 60,
-    "provenance": "cppa-registry:2026-10-26"
+    "provenance": "cppa-registry:2026-10-27"
   },
   {
     "id": "experian-information",
@@ -859,7 +859,7 @@
       "GLBA"
     ],
     "rateLimitPerHour": 60,
-    "provenance": "cppa-registry:2026-10-26"
+    "provenance": "cppa-registry:2026-10-27"
   },
   {
     "id": "family-tree-now",
@@ -887,7 +887,7 @@
     ],
     "sectoralRegimes": [],
     "rateLimitPerHour": 30,
-    "provenance": "cppa-registry:2026-10-26"
+    "provenance": "cppa-registry:2026-10-27"
   },
   {
     "id": "fideo-intelligence",
@@ -915,7 +915,7 @@
     ],
     "sectoralRegimes": [],
     "rateLimitPerHour": 60,
-    "provenance": "cppa-registry:2026-10-26"
+    "provenance": "cppa-registry:2026-10-27"
   },
   {
     "id": "freepeoplesearch-com",
@@ -943,7 +943,7 @@
     ],
     "sectoralRegimes": [],
     "rateLimitPerHour": 30,
-    "provenance": "cppa-registry:2026-10-26"
+    "provenance": "cppa-registry:2026-10-27"
   },
   {
     "id": "general-motors",
@@ -973,7 +973,7 @@
       "CMIA"
     ],
     "rateLimitPerHour": 60,
-    "provenance": "cppa-registry:2026-10-26"
+    "provenance": "cppa-registry:2026-10-27"
   },
   {
     "id": "global-source-data",
@@ -1000,7 +1000,7 @@
     ],
     "sectoralRegimes": [],
     "rateLimitPerHour": 60,
-    "provenance": "cppa-registry:2026-10-26"
+    "provenance": "cppa-registry:2026-10-27"
   },
   {
     "id": "globicom",
@@ -1029,7 +1029,7 @@
     ],
     "sectoralRegimes": [],
     "rateLimitPerHour": 30,
-    "provenance": "cppa-registry:2026-10-26"
+    "provenance": "cppa-registry:2026-10-27"
   },
   {
     "id": "healthcare",
@@ -1057,7 +1057,7 @@
       "HIPAA"
     ],
     "rateLimitPerHour": 60,
-    "provenance": "cppa-registry:2026-10-26"
+    "provenance": "cppa-registry:2026-10-27"
   },
   {
     "id": "healthwise-data",
@@ -1082,7 +1082,7 @@
     "requiredIdentifiers": [],
     "sectoralRegimes": [],
     "rateLimitPerHour": 60,
-    "provenance": "cppa-registry:2026-10-26"
+    "provenance": "cppa-registry:2026-10-27"
   },
   {
     "id": "infopay",
@@ -1124,7 +1124,7 @@
     ],
     "sectoralRegimes": [],
     "rateLimitPerHour": 30,
-    "provenance": "cppa-registry:2026-10-26"
+    "provenance": "cppa-registry:2026-10-27"
   },
   {
     "id": "insightbridge",
@@ -1152,7 +1152,7 @@
     ],
     "sectoralRegimes": [],
     "rateLimitPerHour": 30,
-    "provenance": "cppa-registry:2026-10-26"
+    "provenance": "cppa-registry:2026-10-27"
   },
   {
     "id": "instant-checkmate",
@@ -1183,7 +1183,7 @@
     ],
     "sectoralRegimes": [],
     "rateLimitPerHour": 30,
-    "provenance": "cppa-registry:2026-10-26"
+    "provenance": "cppa-registry:2026-10-27"
   },
   {
     "id": "intelius",
@@ -1232,7 +1232,7 @@
     ],
     "sectoralRegimes": [],
     "rateLimitPerHour": 30,
-    "provenance": "cppa-registry:2026-10-26"
+    "provenance": "cppa-registry:2026-10-27"
   },
   {
     "id": "interactive-data",
@@ -1262,7 +1262,7 @@
       "GLBA"
     ],
     "rateLimitPerHour": 60,
-    "provenance": "cppa-registry:2026-10-26"
+    "provenance": "cppa-registry:2026-10-27"
   },
   {
     "id": "intermedia-ventures",
@@ -1292,7 +1292,7 @@
     ],
     "sectoralRegimes": [],
     "rateLimitPerHour": 30,
-    "provenance": "cppa-registry:2026-10-26"
+    "provenance": "cppa-registry:2026-10-27"
   },
   {
     "id": "lead-intelligence",
@@ -1322,7 +1322,7 @@
       "FCRA"
     ],
     "rateLimitPerHour": 60,
-    "provenance": "cppa-registry:2026-10-26"
+    "provenance": "cppa-registry:2026-10-27"
   },
   {
     "id": "lexisnexis-risk-fl",
@@ -1355,7 +1355,7 @@
       "IIPPA"
     ],
     "rateLimitPerHour": 60,
-    "provenance": "cppa-registry:2026-10-26"
+    "provenance": "cppa-registry:2026-10-27"
   },
   {
     "id": "marriott",
@@ -1382,7 +1382,7 @@
     ],
     "sectoralRegimes": [],
     "rateLimitPerHour": 60,
-    "provenance": "cppa-registry:2026-10-26"
+    "provenance": "cppa-registry:2026-10-27"
   },
   {
     "id": "maxmind",
@@ -1407,7 +1407,7 @@
     "requiredIdentifiers": [],
     "sectoralRegimes": [],
     "rateLimitPerHour": 60,
-    "provenance": "cppa-registry:2026-10-26"
+    "provenance": "cppa-registry:2026-10-27"
   },
   {
     "id": "meltwater-news",
@@ -1432,7 +1432,7 @@
     "requiredIdentifiers": [],
     "sectoralRegimes": [],
     "rateLimitPerHour": 60,
-    "provenance": "cppa-registry:2026-10-26"
+    "provenance": "cppa-registry:2026-10-27"
   },
   {
     "id": "moody-s",
@@ -1457,7 +1457,7 @@
     "requiredIdentifiers": [],
     "sectoralRegimes": [],
     "rateLimitPerHour": 60,
-    "provenance": "cppa-registry:2026-10-26"
+    "provenance": "cppa-registry:2026-10-27"
   },
   {
     "id": "neustar-information-services",
@@ -1488,7 +1488,7 @@
       "HIPAA"
     ],
     "rateLimitPerHour": 60,
-    "provenance": "cppa-registry:2026-10-26"
+    "provenance": "cppa-registry:2026-10-27"
   },
   {
     "id": "nuwber",
@@ -1516,7 +1516,7 @@
     ],
     "sectoralRegimes": [],
     "rateLimitPerHour": 30,
-    "provenance": "cppa-registry:2026-10-26"
+    "provenance": "cppa-registry:2026-10-27"
   },
   {
     "id": "pitchbook-data",
@@ -1541,7 +1541,7 @@
     "requiredIdentifiers": [],
     "sectoralRegimes": [],
     "rateLimitPerHour": 60,
-    "provenance": "cppa-registry:2026-10-26"
+    "provenance": "cppa-registry:2026-10-27"
   },
   {
     "id": "private-records",
@@ -1572,7 +1572,7 @@
     ],
     "sectoralRegimes": [],
     "rateLimitPerHour": 30,
-    "provenance": "cppa-registry:2026-10-26"
+    "provenance": "cppa-registry:2026-10-27"
   },
   {
     "id": "relx",
@@ -1597,7 +1597,7 @@
     "requiredIdentifiers": [],
     "sectoralRegimes": [],
     "rateLimitPerHour": 60,
-    "provenance": "cppa-registry:2026-10-26"
+    "provenance": "cppa-registry:2026-10-27"
   },
   {
     "id": "rocketreach",
@@ -1622,7 +1622,7 @@
     "requiredIdentifiers": [],
     "sectoralRegimes": [],
     "rateLimitPerHour": 60,
-    "provenance": "cppa-registry:2026-10-26"
+    "provenance": "cppa-registry:2026-10-27"
   },
   {
     "id": "scalable-commerce",
@@ -1651,7 +1651,7 @@
     ],
     "sectoralRegimes": [],
     "rateLimitPerHour": 30,
-    "provenance": "cppa-registry:2026-10-26"
+    "provenance": "cppa-registry:2026-10-27"
   },
   {
     "id": "similarweb",
@@ -1678,7 +1678,7 @@
     ],
     "sectoralRegimes": [],
     "rateLimitPerHour": 60,
-    "provenance": "cppa-registry:2026-10-26"
+    "provenance": "cppa-registry:2026-10-27"
   },
   {
     "id": "spokeo",
@@ -1714,7 +1714,7 @@
       "GLBA"
     ],
     "rateLimitPerHour": 30,
-    "provenance": "cppa-registry:2026-10-26"
+    "provenance": "cppa-registry:2026-10-27"
   },
   {
     "id": "spycloud",
@@ -1741,7 +1741,7 @@
     ],
     "sectoralRegimes": [],
     "rateLimitPerHour": 60,
-    "provenance": "cppa-registry:2026-10-26"
+    "provenance": "cppa-registry:2026-10-27"
   },
   {
     "id": "sterling-data",
@@ -1769,7 +1769,7 @@
     ],
     "sectoralRegimes": [],
     "rateLimitPerHour": 60,
-    "provenance": "cppa-registry:2026-10-26"
+    "provenance": "cppa-registry:2026-10-27"
   },
   {
     "id": "tauxbe-data",
@@ -1800,7 +1800,7 @@
       "FCRA"
     ],
     "rateLimitPerHour": 60,
-    "provenance": "cppa-registry:2026-10-26"
+    "provenance": "cppa-registry:2026-10-27"
   },
   {
     "id": "the-people-searchers",
@@ -1830,7 +1830,7 @@
     ],
     "sectoralRegimes": [],
     "rateLimitPerHour": 30,
-    "provenance": "cppa-registry:2026-10-26"
+    "provenance": "cppa-registry:2026-10-27"
   },
   {
     "id": "transunion-interactive",
@@ -1858,7 +1858,7 @@
     ],
     "sectoralRegimes": [],
     "rateLimitPerHour": 60,
-    "provenance": "cppa-registry:2026-10-26"
+    "provenance": "cppa-registry:2026-10-27"
   },
   {
     "id": "transunion-risk-and-alternative-data",
@@ -1886,7 +1886,7 @@
     ],
     "sectoralRegimes": [],
     "rateLimitPerHour": 60,
-    "provenance": "cppa-registry:2026-10-26"
+    "provenance": "cppa-registry:2026-10-27"
   },
   {
     "id": "truth-now",
@@ -1917,7 +1917,7 @@
     ],
     "sectoralRegimes": [],
     "rateLimitPerHour": 30,
-    "provenance": "cppa-registry:2026-10-26"
+    "provenance": "cppa-registry:2026-10-27"
   },
   {
     "id": "truthfinder",
@@ -1952,7 +1952,7 @@
     ],
     "sectoralRegimes": [],
     "rateLimitPerHour": 30,
-    "provenance": "cppa-registry:2026-10-26"
+    "provenance": "cppa-registry:2026-10-27"
   },
   {
     "id": "vi-technologies",
@@ -1979,7 +1979,7 @@
       "HIPAA"
     ],
     "rateLimitPerHour": 60,
-    "provenance": "cppa-registry:2026-10-26"
+    "provenance": "cppa-registry:2026-10-27"
   },
   {
     "id": "west-publishing",
@@ -2008,7 +2008,7 @@
       "GLBA"
     ],
     "rateLimitPerHour": 60,
-    "provenance": "cppa-registry:2026-10-26"
+    "provenance": "cppa-registry:2026-10-27"
   },
   {
     "id": "whitepages",
@@ -2036,7 +2036,7 @@
     ],
     "sectoralRegimes": [],
     "rateLimitPerHour": 30,
-    "provenance": "cppa-registry:2026-10-26"
+    "provenance": "cppa-registry:2026-10-27"
   },
   {
     "id": "ziff-davis",
@@ -2061,6 +2061,6 @@
     "requiredIdentifiers": [],
     "sectoralRegimes": [],
     "rateLimitPerHour": 60,
-    "provenance": "cppa-registry:2026-10-26"
+    "provenance": "cppa-registry:2026-10-27"
   }
 ]

@@ -119,9 +119,12 @@ export function classifyUrl(
     };
   }
 
-  // 5. Anything else: a human decides. Never auto-send at an unclassified host.
+  // 5. Anything else: a human decides. Never auto-send at an unrecognised host.
+  //    Note the kind is `unrecognised_host`, not `ineligible`: the submission IS
+  //    eligible to be looked at, it just is not something we can route automatically.
+  //    Recording it as `ineligible: true` made the stored record contradict itself.
   return {
-    kind: 'ineligible', eligible: true, routedTo: 'manual_review',
+    kind: 'unrecognised_host', eligible: true, routedTo: 'manual_review',
     reason: `${host} is not a recognised data broker, people-search site or search engine. ` +
       'Queued for human review.',
     brokerId: null,
@@ -138,7 +141,19 @@ function reject(kind: CustomRemovalKind, reason: string): ClassifyUrlResult {
  * "send" and "a human looks first" -- it is never used to widen what we will do.
  */
 export function nameMatchesSubject(url: URL, subject: Subject): boolean {
-  const hay = decodeURIComponent(`${url.pathname}?${url.search}`).toLowerCase().replace(/[^a-z]+/g, ' ');
+  // `new URL()` accepts a malformed percent-escape such as `/name/%E0%A4%A`, but
+  // decodeURIComponent throws URIError on it. A user-submitted URL is attacker-
+  // influenced input, so an uncaught throw here takes out the whole custom-removal
+  // command. On a decode failure we fall back to the raw text, which can only make
+  // the match less likely -- and a miss routes to human review, which is safe.
+  const raw = `${url.pathname}${url.search}`;
+  let decoded: string;
+  try {
+    decoded = decodeURIComponent(raw);
+  } catch {
+    decoded = raw;
+  }
+  const hay = decoded.toLowerCase().replace(/[^a-z]+/g, ' ');
   const names = [subject.identifiers.fullName, ...(subject.identifiers.aliases ?? [])];
   return names.some((n) => {
     const parts = n.toLowerCase().split(/\s+/).filter((p) => p.length > 2);

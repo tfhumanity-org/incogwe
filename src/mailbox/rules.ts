@@ -36,14 +36,24 @@ const r = (
 export const RULES: readonly Rule[] = [
   // --- bounces: decided on headers first, because a bounce body often quotes our
   //     own letter and would otherwise match every rule in the file. -------------
-  r('bounce.header.failed', 'bounce', 100, /^(failed|permanent error|5\.\d\.\d)/i, 'headers'),
-  r('bounce.header.autosubmitted', 'bounce', 60, /auto-replied|auto-generated/i, 'headers'),
+  //
+  // These must be SPECIFIC to delivery failure. `bounce` overrides every other class
+  // in OVERRIDES, on the reasoning that a letter which never arrived cannot have been
+  // answered -- so a loose bounce rule does not merely mislabel, it closes a live
+  // request as undeliverable against a broker that is reachable and replying.
+  r('bounce.header.dsn', 'bounce', 100, /^content-type:\s*multipart\/report.*report-type=delivery-status/im, 'headers'),
+  r('bounce.header.failed', 'bounce', 100, /^(x-failed-recipients:|status:\s*5\.\d+\.\d+|action:\s*failed)/im, 'headers'),
   r('bounce.from.mailer', 'bounce', 90, /^(mailer-daemon|postmaster)@/i, 'from'),
   r('bounce.subject', 'bounce', 80, /\b(undeliverable|delivery (status notification|has failed)|returned mail|mail delivery failed)\b/i, 'subject'),
   r('bounce.body.smtp', 'bounce', 70, /\b5\d\d[ -]?(5\.\d\.\d)?\b.*\b(no such user|user unknown|mailbox (unavailable|not found)|address rejected|recipient rejected)\b/i),
   r('bounce.body.noroute', 'bounce', 70, /\b(recipient address rejected|host or domain name not found|does not exist)\b/i),
 
   // --- vacation / ticketing autoresponders ----------------------------------
+  // RFC 3834 says an autoresponder SHOULD stamp `Auto-Submitted: auto-replied`, so
+  // this header marks a vacation or ticketing reply -- NOT a delivery failure. It
+  // scored `bounce` until a review caught it, which meant a broker who was merely on
+  // holiday had the subject's request closed as "the letter never arrived".
+  r('auto.header.autosubmitted', 'auto_reply', 60, /^auto-submitted:\s*auto-(replied|generated)/im, 'headers'),
   r('auto.outofoffice', 'auto_reply', 70, /\b(out of (the )?office|on annual leave|currently away|automatic reply)\b/i),
   r('auto.ticket', 'auto_reply', 55, /\b(we have received your (message|email|request)|ticket (number|#|has been created)|case number \w+ has been (created|opened)|thank you for contacting)\b/i),
   r('auto.donotreply', 'auto_reply', 30, /\bdo not reply to this (email|message)\b/i),

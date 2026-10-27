@@ -9,6 +9,9 @@ import { grantConsent } from '../src/consent/consent.ts';
 import { ConsentRequiredError } from '../src/consent/consent.ts';
 import { broker, ids, subject, T0 } from './helpers.ts';
 
+/** Letter prose is wrapped to 80 columns, so assertions on it must ignore newlines. */
+const flat = (text: string) => text.replace(/\s+/g, ' ');
+
 const consent = (over: Partial<Parameters<typeof grantConsent>[0]> = {}) => grantConsent({
   subjectId: 'subj_test_1', jurisdictions: ['US-CA'],
   scopes: ['erasure_requests', 'regulator_complaints'],
@@ -78,7 +81,7 @@ describe('composeLetter', () => {
     assert.match(l.body, /California Privacy Protection Agency/);
     assert.match(l.body, /Avery Nakamura/);
     assert.equal(l.dueAt.slice(0, 10), '2026-04-15');
-    assert.match(l.body, /must not be added to, or used to enrich, any record/);
+    assert.match(flat(l.body), /must not be added to, or used to enrich, any record/);
   });
 
   test('renders a GDPR letter for an EEA subject against an EEA broker', () => {
@@ -136,7 +139,7 @@ describe('composeLetter', () => {
       requestRef: 'req_5', replyTo: 'r@x.invalid', agentName: 'a', sentAt: T0,
     });
     assert.match(l.body, /Fair Credit Reporting Act/);
-    assert.match(l.body, /identify the record and the exemption relied upon/);
+    assert.match(flat(l.body), /identify the record and the exemption relied upon/);
   });
 
   test('adds the DROP notice for a Californian against a registered broker', () => {
@@ -209,6 +212,63 @@ describe('composeLetter', () => {
       subject: s, broker: noContact, entitlements: resolveEntitlements(s, noContact),
       consent: consent(), requestRef: 'r', replyTo: 'x@y.invalid', agentName: 'a', sentAt: T0,
     }), NoContactError);
+  });
+});
+
+describe('the numbered request list', () => {
+  const s = subject();
+  const b = broker();
+  const numbersIn = (body: string) =>
+    [...body.matchAll(/^(\d+)\. [A-Z]/gm)].map((m) => Number(m[1]));
+
+  const letterFor = (s2 = s, b2 = b) => composeLetter({
+    subject: s2, broker: b2, entitlements: resolveEntitlements(s2, b2),
+    consent: consent({ jurisdictions: [s2.residence] }),
+    requestRef: 'req_n', replyTo: 'r@x.invalid', agentName: 'a', sentAt: T0,
+  });
+
+  test('CCPA with a sectoral caveat numbers 1..6 with no gaps', () => {
+    const l = letterFor(s, broker({ sectoralRegimes: ['FCRA'] }));
+    assert.deepEqual(numbersIn(l.body), [1, 2, 3, 4, 5, 6]);
+  });
+
+  test('a broker with no sectoral regime numbers 1..5 with no gaps', () => {
+    assert.deepEqual(numbersIn(letterFor().body), [1, 2, 3, 4, 5]);
+  });
+
+  test('Utah, which grants no limit-sensitive right, still numbers contiguously', () => {
+    // This is the case that used to render "1. 2. 3. 5." -- a compliance team reading
+    // a legal demand with a gap reasonably concludes a paragraph was lost in transit.
+    const ut = subject({ residence: 'US-UT' });
+    const l = letterFor(ut, broker({ targetsRegions: ['US', 'US-UT'] }));
+    assert.equal(l.instrument, 'UCPA');
+    assert.ok(!l.body.includes('LIMIT SENSITIVE'), 'UCPA grants no such right');
+    assert.deepEqual(numbersIn(l.body), [1, 2, 3, 4]);
+  });
+
+  test('Iowa, also without the limit-sensitive right, numbers contiguously', () => {
+    const ia = subject({ residence: 'US-IA' });
+    const l = letterFor(ia, broker({ targetsRegions: ['US', 'US-IA'] }));
+    assert.equal(l.instrument, 'ICDPA');
+    assert.deepEqual(numbersIn(l.body), [1, 2, 3, 4]);
+  });
+
+  test('every instrument renders a contiguous list from 1', () => {
+    for (const region of ['US-CA', 'US-VA', 'US-TX', 'US-UT', 'US-IA', 'GB', 'DE', 'CA', 'CH']) {
+      const sub = subject({ residence: region });
+      // Established locally: PIPEDA has no extraterritorial reach, so a Canadian
+      // subject genuinely cannot invoke it against a US-established broker.
+      const l = letterFor(sub, broker({ establishedIn: region, targetsRegions: [region] }));
+      const ns = numbersIn(l.body);
+      assert.ok(ns.length >= 4, `${region}: only ${ns.length} items`);
+      assert.deepEqual(ns, ns.map((_, i) => i + 1), `${region} numbering: ${ns.join(',')}`);
+    }
+  });
+
+  test('no request line exceeds 80 columns', () => {
+    const l = letterFor(s, broker({ sectoralRegimes: ['FCRA', 'GLBA'] }));
+    const over = l.body.split('\n').filter((x) => x.length > 80 && /^(\d+\.|   )/.test(x));
+    assert.deepEqual(over, []);
   });
 });
 

@@ -276,7 +276,62 @@ tested against names that are not Latin.*
 
 ---
 
-## 14. Shipping a live transport is a one-line mistake away
+## 14. Nine defects an independent code review found that 197 tests did not
+
+A full review of the branch surfaced fourteen issues, all reproducible, none caught
+by the suite. The individual fixes are in the commit; what is worth keeping is the
+*shape* of what the tests were blind to.
+
+**Three were inverted or tautological logic that still produced a plausible result.**
+`flag(args,'plan') || arg(args,'plan','individual') === 'family' ? …` parses as
+`(flag || …) ? …`, so every explicit `--plan individual` created a five-seat family
+account. `account:join` built the expected invitation out of the token it was about
+to check, making both the hash comparison and the expiry check compare a value with
+itself — anyone who knew an account id could join it with an arbitrary string. And a
+bounce rule was `^`-anchored without the `m` flag against joined headers, so the DSN
+signal it existed for could never fire.
+→ *A check whose inputs both derive from the thing being checked is not a check.
+Write the test that presents a forged credential, not only the test that presents a
+good one.*
+
+**Three were state machines that deadlocked or leaked.** Recurrence set a request to
+`planned`, which `decideAction` ignores and the planner counts as open — so the
+broker was parked forever *and* blocked from every future request. Escalation set a
+`nextActionAt` that the same function returned before ever reading. A soft transport
+rejection wrote a `closed` row with no outcome, which `openRequests()` excludes and
+the dashboard counts as open: invisible to the engine, and reported as running.
+→ *For every state, ask who moves it next. If the answer is "nobody", you have a
+terminal state you did not intend. Enumerating transitions in a table catches this;
+testing the happy path does not.*
+
+**Two were scoping errors where global state shadowed instance state.** The broker
+registry's lookup maps were module-global, so an operator who built a registry from
+their own corrected file still got the shipped legal contact back from `get()` and
+every letter went to the wrong inbox. `putConsent` recomputed `seq` as `COUNT(*)` on
+every write, so re-saving an earlier record pushed it past later ones and the
+evidence pack reported the authorisation chain INVALID.
+→ *A constructor that accepts data must answer from that data. Anything resolved
+through a module-level map is answering a different question than the caller asked.*
+
+**And one the review did not name, found by writing the regression test for the one
+it did.** `revokeConsent` rewrote a record in place and re-hashed it, so the next
+entry's `previousHash` no longer matched and the whole chain reported INVALID — for
+a subject doing nothing but exercising their right to withdraw. A tamper-evident log
+that a legitimate action invalidates is not tamper-evident, it is fragile. Revocation
+now appends an entry rather than editing one.
+→ *Append-only means append-only. The moment a "log" has an update path, every
+guarantee it offers is conditional on nobody using it.*
+
+**The meta-lesson, now three times in this file (#12, #13, here):** the suite tested
+what the code was supposed to do and almost nothing about what it was supposed to
+refuse, lose, or leave alone. 197 green tests coexisted with a forgeable invitation,
+a seat limit that did not limit, and a holiday autoresponder closing live legal
+requests as undeliverable. Budget review time for a codebase that passes its own
+tests — passing them is the precondition for review, not a substitute.
+
+---
+
+## 15. Shipping a live transport is a one-line mistake away
 
 **What we avoided.** An SMTP client is ten lines. With one in the repo, sending
 unreviewed draft legal letters to real companies in a real person's name is a config

@@ -100,7 +100,7 @@ describe('planning', () => {
   test('does not duplicate an already-open request', () => {
     const { registry, subject: s } = harness();
     const plan = planRequests(s, {
-      registry, existing: [{ brokerId: 'mock-silent', status: 'sent' }],
+      registry, existing: [{ brokerId: 'mock-silent', status: 'sent', nextActionAt: null }],
     });
     assert.equal(plan.requests.length, MOCKS.length - 1);
     assert.deepEqual(plan.skipped, [{ brokerId: 'mock-silent', reason: 'already_open' }]);
@@ -357,7 +357,20 @@ describe('the full lifecycle', () => {
     const r = await sched.tick();
     assert.equal(r.reverifications, 1);
     assert.equal(r.recurrences, 1);
-    assert.equal(h.store.getRequest(priv.id)!.status, 'planned', 'queued to be sent afresh');
+
+    // The recurred request stays closed with its outcome intact and its due date
+    // cleared, which is what tells the planner it may send afresh.
+    const recurred = h.store.getRequest(priv.id)!;
+    assert.equal(recurred.status, 'closed');
+    assert.equal(recurred.outcome, 'confirmed_deleted', 'the history is not rewritten');
+    assert.equal(recurred.nextActionAt, null, 'cleared means due now');
+
+    const day95 = addDays(T0, 95);
+    const replanned = planRequests(h.subject, {
+      registry, existing: h.store.requestsForSubject(h.subject.id), now: day95,
+    });
+    assert.ok(replanned.requests.some((p) => p.broker.id === 'priv'),
+      'the recurred broker must actually be re-planned, not parked forever');
     h.store.close();
   });
 

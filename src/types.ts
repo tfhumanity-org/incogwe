@@ -363,6 +363,7 @@ export type CustomRemovalKind =
   | 'news_or_press'
   | 'court_or_public_record'
   | 'user_controlled'
+  | 'unrecognised_host'
   | 'ineligible';
 
 export interface CustomRemovalRequest {

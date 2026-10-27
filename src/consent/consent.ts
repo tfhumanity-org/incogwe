@@ -83,10 +83,34 @@ export function grantConsent(input: GrantConsentInput): ConsentRecord {
   return { ...base, entryHash: hashObject(base) };
 }
 
-export function revokeConsent(record: ConsentRecord, now: Date): ConsentRecord {
-  const base = { ...record, revokedAt: now.toISOString() };
-  const { entryHash: _drop, ...rest } = base;
-  return { ...base, entryHash: hashObject(rest) };
+/**
+ * Revocation APPENDS a new entry; it never edits the one being revoked.
+ *
+ * It used to rewrite the original record in place and re-hash it. That silently
+ * broke the chain for anyone who had more than one authorisation: the following
+ * entry's `previousHash` still pointed at the original's old digest, so
+ * `verifyConsentChain` returned false and the evidence pack reported the subject's
+ * authorisation as INVALID -- for doing nothing but exercising their right to
+ * withdraw. A tamper-evident log that a legitimate action invalidates is not
+ * tamper-evident, it is just fragile. Append-only is the whole point.
+ *
+ * @param head the `entryHash` of the current last entry in this subject's chain
+ */
+export function revokeConsent(record: ConsentRecord, now: Date, head?: string | null): ConsentRecord {
+  const base = {
+    id: newId('consent'),
+    subjectId: record.subjectId,
+    jurisdictions: [...record.jurisdictions],
+    scopes: [...record.scopes],
+    grantedAt: record.grantedAt,
+    expiresAt: record.expiresAt,
+    revokedAt: now.toISOString(),
+    signatureName: record.signatureName,
+    method: record.method,
+    documentHash: record.documentHash,
+    previousHash: head === undefined ? record.entryHash : head,
+  };
+  return { ...base, entryHash: hashObject(base) };
 }
 
 /** Verify the hash chain over an account's consent log. */

@@ -63,6 +63,13 @@ CREATE TABLE IF NOT EXISTS custom_removals (
   eligible INTEGER NOT NULL, routed_to TEXT NOT NULL, broker_id TEXT,
   submitted_at TEXT NOT NULL, sealed TEXT NOT NULL
 );
+-- Invitations are persisted so that accepting one can actually be verified. They
+-- were previously held only by the caller, which let the CLI synthesise an invite
+-- from the very token it was checking -- a tautology, not a check.
+CREATE TABLE IF NOT EXISTS invites (
+  id TEXT PRIMARY KEY, account_id TEXT NOT NULL, token_hash TEXT NOT NULL UNIQUE,
+  created_at TEXT NOT NULL, expires_at TEXT NOT NULL, used_at TEXT
+);
 CREATE TABLE IF NOT EXISTS letters (
   request_id TEXT PRIMARY KEY, body_hash TEXT NOT NULL, sealed TEXT NOT NULL,
   rendered_at TEXT NOT NULL
@@ -131,22 +138,44 @@ export class Store {
   // --- consent --------------------------------------------------------------
   putConsent(c: ConsentRecord): void {
     const sealed = sealJson(this.#kr, c, this.#aad('consents', 'record', c.id));
-    const seq = (this.#db.prepare('SELECT COUNT(*) n FROM consents WHERE subject_id = ?')
-      .get(c.subjectId) as { n: number }).n;
+    // Keep an existing row's position. Recomputing it as COUNT(*) on every write
+    // meant re-saving an earlier record -- which revokeConsent does, same id, via
+    // INSERT OR REPLACE -- pushed it past later entries, so consentChain() returned
+    // them out of order and the evidence pack reported the authorisation chain as
+    // INVALID for any subject with more than one record.
+    const existing = this.#db.prepare('SELECT seq FROM consents WHERE id = ?')
+      .get(c.id) as { seq: number } | undefined;
+    const seq = existing?.seq ?? (this.#db.prepare(
+      'SELECT COUNT(*) n FROM consents WHERE subject_id = ?',
+    ).get(c.subjectId) as { n: number }).n;
     this.#db.prepare(
       `INSERT OR REPLACE INTO consents (id, subject_id, record_sealed, granted_at, revoked_at, entry_hash, seq)
        VALUES (?, ?, ?, ?, ?, ?, ?)`,
     ).run(c.id, c.subjectId, sealed, c.grantedAt, c.revokedAt, c.entryHash, seq);
   }
 
-  /** The live consent for a subject, or null. */
+  /**
+   * The live consent for a subject, or null.
+   *
+   * The chain is append-only, and a revocation is an appended entry rather than an
+   * edit, so the answer is simply "the last entry, unless it is a revocation".
+   * Filtering on `revoked_at IS NULL` would return the superseded grant that sits
+   * behind a revocation and hand a caller an authorisation the subject withdrew.
+   */
   getConsent(subjectId: string): ConsentRecord | null {
     const r = this.#db.prepare(
-      `SELECT id, record_sealed FROM consents
-       WHERE subject_id = ? AND revoked_at IS NULL ORDER BY granted_at DESC LIMIT 1`,
-    ).get(subjectId) as { id: string; record_sealed: string } | undefined;
-    if (!r) return null;
+      'SELECT id, record_sealed, revoked_at FROM consents WHERE subject_id = ? ORDER BY seq DESC LIMIT 1',
+    ).get(subjectId) as { id: string; record_sealed: string; revoked_at: string | null } | undefined;
+    if (!r || r.revoked_at) return null;
     return openJson(this.#kr, r.record_sealed, this.#aad('consents', 'record', r.id));
+  }
+
+  /** The `entryHash` of the last entry, to chain the next one onto. */
+  consentChainHead(subjectId: string): string | null {
+    const r = this.#db.prepare(
+      'SELECT entry_hash FROM consents WHERE subject_id = ? ORDER BY seq DESC LIMIT 1',
+    ).get(subjectId) as { entry_hash: string } | undefined;
+    return r?.entry_hash ?? null;
   }
 
   consentChain(subjectId: string): ConsentRecord[] {
@@ -297,6 +326,53 @@ export class Store {
     return (this.#db.prepare('SELECT id, sealed FROM custom_removals WHERE subject_id = ? ORDER BY submitted_at')
       .all(subjectId) as { id: string; sealed: string }[])
       .map((r) => openJson<CustomRemovalRequest>(this.#kr, r.sealed, this.#aad('custom_removals', 'c', r.id)));
+  }
+
+  // --- invitations -----------------------------------------------------------
+  putInvite(inv: { id: string; accountId: string; tokenHash: string; createdAt: string; expiresAt: string }): void {
+    this.#db.prepare(
+      `INSERT OR REPLACE INTO invites (id, account_id, token_hash, created_at, expires_at, used_at)
+       VALUES (?, ?, ?, ?, ?, NULL)`,
+    ).run(inv.id, inv.accountId, inv.tokenHash, inv.createdAt, inv.expiresAt);
+  }
+
+  /** Looked up by hash, so the raw token is never stored and never logged. */
+  getInviteByTokenHash(tokenHash: string): {
+    id: string; accountId: string; tokenHash: string; expiresAt: string; usedAt: string | null;
+  } | null {
+    const r = this.#db.prepare('SELECT * FROM invites WHERE token_hash = ?')
+      .get(tokenHash) as Record<string, string | null> | undefined;
+    if (!r) return null;
+    return {
+      id: String(r['id']), accountId: String(r['account_id']),
+      tokenHash: String(r['token_hash']), expiresAt: String(r['expires_at']),
+      usedAt: (r['used_at'] as string) ?? null,
+    };
+  }
+
+  markInviteUsed(id: string, at: string): void {
+    this.#db.prepare('UPDATE invites SET used_at = ? WHERE id = ?').run(at, id);
+  }
+
+  // --- retention --------------------------------------------------------------
+  /**
+   * Delete inbound replies that could never be attributed to a request.
+   *
+   * `deleteSubject` cannot reach these: an unattributed reply has no thread key, so
+   * by construction we do not know whose it is, and deleting every orphan when one
+   * subject erases would destroy another subject's evidence. They are therefore
+   * governed by a retention period instead -- which is the honest answer, because
+   * holding a sealed email body indefinitely on the chance a human attributes it is
+   * not a purpose we could defend.
+   *
+   * Run from the scheduler tick.
+   */
+  purgeUnattributedReplies(now: Date, retentionDays = 90): number {
+    const cutoff = new Date(now.getTime() - retentionDays * 86_400_000).toISOString();
+    const info = this.#db.prepare(
+      'DELETE FROM replies WHERE thread_key IS NULL AND received_at < ?',
+    ).run(cutoff);
+    return Number(info.changes);
   }
 
   // --- erasure of our own records -------------------------------------------

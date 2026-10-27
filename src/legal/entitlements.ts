@@ -22,9 +22,18 @@ function score(inst: LegalInstrument, broker: Broker, subject: Subject): number 
 
   // Directly established in a region the instrument governs: strongest footing.
   const governs = inst.subjectRegions.includes(broker.establishedIn);
-  if (governs) s -= 40;
-  else if (inst.extraterritorial && broker.targetsRegions.includes(subject.residence)) s -= 20;
-  else if (!inst.extraterritorial) return Number.POSITIVE_INFINITY; // unreachable
+  if (governs) {
+    s -= 40;
+  } else if (inst.extraterritorial && targetsSubjectRegion(broker, subject.residence)) {
+    s -= 20;
+  } else {
+    // Not established where the instrument bites, and either the instrument has no
+    // extraterritorial reach or the broker does not target this subject's region.
+    // Returning a finite score here would emit an entitlement whose own `basis` text
+    // asserts the broker "monitors or offers services to data subjects in that
+    // jurisdiction" -- a factual claim our registry data contradicts, in a letter.
+    return Number.POSITIVE_INFINITY;
+  }
 
   // Prefer a shorter clock, all else equal.
   s += inst.responseDays / 10;
@@ -74,6 +83,13 @@ export function resolveEntitlements(
       rank: idx,
     } satisfies Entitlement;
   }).filter((e) => e.rights.length > 0);
+}
+
+/** `US-CA` is covered by a broker that targets `US-CA` or the whole of `US`. */
+function targetsSubjectRegion(broker: Broker, residence: RegionCode): boolean {
+  if (broker.targetsRegions.includes(residence)) return true;
+  const country = residence.split('-')[0]!;
+  return broker.targetsRegions.includes(country);
 }
 
 function basisFor(inst: LegalInstrument, broker: Broker, residence: RegionCode): string {

@@ -45,6 +45,10 @@ export function createAccount(ownerIdentifiers: SubjectIdentifiers, residence: R
   return { account, owner };
 }
 
+/**
+ * Mints an invitation AND persists it. Only the hash is stored; the raw token is
+ * returned once, to be handed to the invitee out of band.
+ */
 export function createInvite(store: Store, accountId: string, now: Date): Invite {
   const account = store.getAccount(accountId);
   if (!account) throw new InviteError(`unknown account ${accountId}`);
@@ -53,17 +57,34 @@ export function createInvite(store: Store, accountId: string, now: Date): Invite
     throw new SeatLimitError(`account ${accountId} is full (${used}/${account.maxSubjects})`);
   }
   const token = newId('inv');
-  return {
+  const invite: Invite = {
     id: newId('invite'),
     accountId,
     token,
     expiresAt: addDays(now, INVITE_TTL_HOURS / 24).toISOString(),
     tokenHash: sha256(token),
   };
+  store.putInvite({
+    id: invite.id,
+    accountId: invite.accountId,
+    tokenHash: invite.tokenHash,
+    createdAt: now.toISOString(),
+    expiresAt: invite.expiresAt,
+  });
+  return invite;
 }
 
 export interface AcceptInviteInput {
-  readonly invite: Invite;
+  /**
+   * The raw token the invitee presents. It is looked up by hash against the stored
+   * invitation -- the caller does NOT supply the invitation itself.
+   *
+   * It used to. The CLI then built the expected invitation out of the very token it
+   * was about to check, so both the hash comparison and the expiry check compared a
+   * value against itself and always passed: anyone who knew an account id could join
+   * it with an arbitrary string. A credential must be verified against stored state,
+   * never against something derived from the credential.
+   */
   readonly presentedToken: string;
   readonly identifiers: SubjectIdentifiers;
   readonly residence: RegionCode;
@@ -80,8 +101,11 @@ export interface AcceptInviteInput {
  * that no request can ever lawfully use.
  */
 export function acceptInvite(store: Store, input: AcceptInviteInput): Subject {
-  const { invite, now } = input;
-  if (sha256(input.presentedToken) !== invite.tokenHash) throw new InviteError('invalid invitation token');
+  const { now } = input;
+
+  const invite = store.getInviteByTokenHash(sha256(input.presentedToken));
+  if (!invite) throw new InviteError('invalid invitation token');
+  if (invite.usedAt) throw new InviteError(`invitation was already used on ${invite.usedAt}`);
   if (new Date(invite.expiresAt).getTime() <= now.getTime()) throw new InviteError('invitation has expired');
 
   const account = store.getAccount(invite.accountId);
@@ -116,6 +140,9 @@ export function acceptInvite(store: Store, input: AcceptInviteInput): Subject {
     previousHash: null,     // each adult's chain is their own
   });
   store.putConsent(consent);
+  // Single use. Marked only once the profile and its consent both exist, so a
+  // failure part-way through does not burn the invitation.
+  store.markInviteUsed(invite.id, now.toISOString());
 
   log.info('family member joined and signed their own authorisation', {
     accountId: invite.accountId, subjectId: subject.id, residence: input.residence,
@@ -132,7 +159,7 @@ export function acceptInvite(store: Store, input: AcceptInviteInput): Subject {
  */
 export function leaveAccount(store: Store, subjectId: string, now: Date): { deleted: Record<string, number> } {
   const live = store.getConsent(subjectId);
-  if (live) store.putConsent(revokeConsent(live, now));
+  if (live) store.putConsent(revokeConsent(live, now, store.consentChainHead(subjectId)));
   const result = store.deleteSubject(subjectId);
   log.info('subject left and was erased', { subjectId, deleted: result.deleted });
   return result;

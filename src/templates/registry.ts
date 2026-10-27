@@ -90,24 +90,7 @@ We write on behalf of the data subject identified below to exercise their rights
 {{ basis }}
 {{ IDENTIFIERS }}{{ OBSERVED }}
 REQUESTS
-1. ERASURE. Erase without undue delay all personal data you hold relating to the data
-   subject. {{ erasureCitation }}
-2. ACCESS. Before or alongside erasure, confirm what categories of personal data you
-   held, the sources from which you obtained them, the purposes of processing, and the
-   recipients or categories of recipients to whom they have been disclosed.
-   {{ accessCitation }}
-3. OBJECTION. The data subject objects to the processing of their personal data for
-   direct marketing purposes and for the purposes of profiling related to such marketing.
-   This objection is absolute and you must cease such processing on receipt.
-   {{ objectionCitation }}
-4. ONWARD NOTIFICATION AND SUPPRESSION. Communicate this erasure to each recipient to
-   whom the personal data has been disclosed, and confirm that you have done so.
-   {{ suppressionCitation }} Add the identifiers above to your internal suppression
-   list so that the data subject's personal data is not re-collected or re-acquired
-   from an upstream source.
-{{#sectoralCaveat}}
-5. SECTORAL REGULATION. {{ sectoralCaveat }}
-{{/sectoralCaveat}}
+{{ REQUESTS }}
 {{#supportingInstruments}}
 
 FURTHER RIGHTS RELIED UPON IN THE ALTERNATIVE
@@ -128,27 +111,7 @@ We write on behalf of the consumer identified below to exercise their rights und
 {{ basis }}
 {{ IDENTIFIERS }}{{ OBSERVED }}
 REQUESTS
-1. DELETE. Delete all personal information you have collected about the consumer, and
-   direct any service providers, contractors and third parties to do the same.
-   {{ erasureCitation }}
-2. KNOW. Disclose the categories of personal information you collected about the
-   consumer, the categories of sources, the business or commercial purpose for
-   collecting or selling it, and the categories of third parties to whom you disclosed,
-   sold or shared it. {{ accessCitation }}
-3. OPT OUT OF SALE AND SHARING. The consumer opts out of the sale and sharing of their
-   personal information, including for cross-context behavioural advertising.
-   {{ optOutCitation }}
-{{#limitSensitiveCitation}}
-4. LIMIT SENSITIVE PERSONAL INFORMATION. Limit the use and disclosure of the consumer's
-   sensitive personal information to that necessary to provide the goods or services
-   requested. {{ limitSensitiveCitation }}
-{{/limitSensitiveCitation}}
-5. SUPPRESSION. Retain only the minimum identifying information necessary to honour this
-   deletion and opt-out on an ongoing basis, and place the consumer on your suppression
-   list so that their personal information is not re-collected or re-acquired.
-{{#sectoralCaveat}}
-6. SECTORAL REGULATION. {{ sectoralCaveat }}
-{{/sectoralCaveat}}
+{{ REQUESTS }}
 {{#dropNotice}}
 
 CALIFORNIA DELETE ACT
@@ -178,20 +141,7 @@ We write on behalf of the individual identified below under the
 {{ basis }}
 {{ IDENTIFIERS }}{{ OBSERVED }}
 REQUESTS
-1. WITHDRAWAL OF CONSENT. The individual withdraws any consent, express or implied, on
-   which you rely to collect, use or disclose their personal information.
-   {{ objectionCitation }}
-2. ACCESS. Provide an account of the personal information you hold about the individual,
-   its sources, how it has been used, and the third parties to which it has been
-   disclosed. {{ accessCitation }}
-3. DELETION. Having withdrawn consent, you no longer have a purpose for which retention
-   is necessary. Destroy, erase or render anonymous the personal information you hold.
-   {{ erasureCitation }}
-4. SUPPRESSION. Place the individual on your do-not-collect list so their personal
-   information is not re-acquired from an upstream source.
-{{#sectoralCaveat}}
-5. SECTORAL REGULATION. {{ sectoralCaveat }}
-{{/sectoralCaveat}}
+{{ REQUESTS }}
 {{ AUTHORITY }}{{ DEADLINE }}
 Please direct all correspondence to {{ replyTo }}, quoting reference {{ requestRef }}.
 
@@ -207,14 +157,7 @@ We write on behalf of the data subject identified below under the
 {{ basis }}
 {{ IDENTIFIERS }}{{ OBSERVED }}
 REQUESTS
-1. ACCESS. Provide the information required under {{ accessCitation }}, including the
-   personal data held, its source, the purpose of processing, and the recipients.
-2. DELETION. Delete or destroy the personal data you hold about the data subject.
-   {{ erasureCitation }}
-3. OBJECTION. The data subject objects to the disclosure of their personal data to third
-   parties. {{ objectionCitation }}
-4. SUPPRESSION. Record the objection so that the data subject's personal data is not
-   re-collected.
+{{ REQUESTS }}
 {{ AUTHORITY }}{{ DEADLINE }}
 Please direct all correspondence to {{ replyTo }}, quoting reference {{ requestRef }}.
 
@@ -269,4 +212,65 @@ export function templateFor(id: LegalInstrumentId): TemplateDef {
   const t = TEMPLATES.get(id);
   if (!t) throw new Error(`no request template for instrument ${id}`);
   return t;
+}
+
+// ---------------------------------------------------------------------------
+// The numbered request list
+// ---------------------------------------------------------------------------
+
+/**
+ * Request items are data, not hardcoded numbers in the body.
+ *
+ * They used to be literal ("1. DELETE", "4. LIMIT SENSITIVE") with two of them
+ * wrapped in conditional blocks. A UCPA or Iowa letter, which carries no
+ * limit-sensitive right, therefore rendered "1. 2. 3. 5." -- and a compliance team
+ * reading a legal demand with a gap in its numbering reasonably concludes a
+ * paragraph went missing in transit. Numbering is now assigned after filtering.
+ */
+export interface RequestItemSpec {
+  readonly heading: string;
+  readonly text: string;
+  /** Scope key that must be truthy for this item to appear. */
+  readonly requires?: string;
+}
+
+export type TemplateFamily = 'gdpr' | 'us_state' | 'pipeda' | 'fadp';
+
+export const REQUEST_ITEMS: Readonly<Record<TemplateFamily, readonly RequestItemSpec[]>> = {
+  gdpr: [
+    { heading: 'ERASURE', text: 'Erase without undue delay all personal data you hold relating to the data subject. {{ erasureCitation }}' },
+    { heading: 'ACCESS', text: 'Before or alongside erasure, confirm what categories of personal data you held, the sources from which you obtained them, the purposes of processing, and the recipients or categories of recipients to whom they have been disclosed. {{ accessCitation }}' },
+    { heading: 'OBJECTION', text: "The data subject objects to the processing of their personal data for direct marketing purposes and for the purposes of profiling related to such marketing. This objection is absolute and you must cease such processing on receipt. {{ objectionCitation }}" },
+    { heading: 'ONWARD NOTIFICATION AND SUPPRESSION', text: "Communicate this erasure to each recipient to whom the personal data has been disclosed, and confirm that you have done so. {{ suppressionCitation }} Add the identifiers above to your internal suppression list so that the data subject's personal data is not re-collected or re-acquired from an upstream source." },
+    { heading: 'SECTORAL REGULATION', text: '{{ sectoralCaveat }}', requires: 'sectoralCaveat' },
+  ],
+  us_state: [
+    { heading: 'DELETE', text: 'Delete all personal information you have collected about the consumer, and direct any service providers, contractors and third parties to do the same. {{ erasureCitation }}' },
+    { heading: 'KNOW', text: 'Disclose the categories of personal information you collected about the consumer, the categories of sources, the business or commercial purpose for collecting or selling it, and the categories of third parties to whom you disclosed, sold or shared it. {{ accessCitation }}' },
+    { heading: 'OPT OUT OF SALE AND SHARING', text: 'The consumer opts out of the sale and sharing of their personal information, including for cross-context behavioural advertising. {{ optOutCitation }}' },
+    { heading: 'LIMIT SENSITIVE PERSONAL INFORMATION', text: "Limit the use and disclosure of the consumer's sensitive personal information to that necessary to provide the goods or services requested. {{ limitSensitiveCitation }}", requires: 'limitSensitiveCitation' },
+    { heading: 'SUPPRESSION', text: 'Retain only the minimum identifying information necessary to honour this deletion and opt-out on an ongoing basis, and place the consumer on your suppression list so that their personal information is not re-collected or re-acquired.' },
+    { heading: 'SECTORAL REGULATION', text: '{{ sectoralCaveat }}', requires: 'sectoralCaveat' },
+  ],
+  pipeda: [
+    { heading: 'WITHDRAWAL OF CONSENT', text: 'The individual withdraws any consent, express or implied, on which you rely to collect, use or disclose their personal information. {{ objectionCitation }}' },
+    { heading: 'ACCESS', text: 'Provide an account of the personal information you hold about the individual, its sources, how it has been used, and the third parties to which it has been disclosed. {{ accessCitation }}' },
+    { heading: 'DELETION', text: 'Having withdrawn consent, you no longer have a purpose for which retention is necessary. Destroy, erase or render anonymous the personal information you hold. {{ erasureCitation }}' },
+    { heading: 'SUPPRESSION', text: 'Place the individual on your do-not-collect list so their personal information is not re-acquired from an upstream source.' },
+    { heading: 'SECTORAL REGULATION', text: '{{ sectoralCaveat }}', requires: 'sectoralCaveat' },
+  ],
+  fadp: [
+    { heading: 'ACCESS', text: 'Provide the information required under {{ accessCitation }}, including the personal data held, its source, the purpose of processing, and the recipients.' },
+    { heading: 'DELETION', text: 'Delete or destroy the personal data you hold about the data subject. {{ erasureCitation }}' },
+    { heading: 'OBJECTION', text: 'The data subject objects to the disclosure of their personal data to third parties. {{ objectionCitation }}' },
+    { heading: 'SUPPRESSION', text: "Record the objection so that the data subject's personal data is not re-collected." },
+  ],
+};
+
+export function familyFor(id: LegalInstrumentId): TemplateFamily {
+  if (GDPR_FAMILY.includes(id)) return 'gdpr';
+  if (US_FAMILY.includes(id)) return 'us_state';
+  if (id === 'PIPEDA') return 'pipeda';
+  if (id === 'CH_FADP') return 'fadp';
+  throw new Error(`no template family for instrument ${id}`);
 }

@@ -24,6 +24,9 @@ import { log } from '../util/logging.ts';
 
 export class TemplatesNotReviewedError extends Error {}
 
+/** The transport failed in a way that is worth retrying. No state is written. */
+export class TransientSendError extends Error {}
+
 export interface SenderConfig {
   readonly agentName: string;
   readonly replyToBase: string;
@@ -133,6 +136,17 @@ export class Sender {
 
     const res = await this.#cfg.transport.send(letter, p.broker, p.threadKey);
 
+    // A soft rejection -- the transport could not deliver now, but the address is
+    // fine -- must leave nothing behind. Writing a `closed` row with no outcome
+    // created a request that `openRequests()` excluded (so the scheduler never
+    // retried it) while the dashboard still counted it as open. Returning without
+    // persisting means the next plan simply picks the broker up again.
+    if (!res.accepted && !res.undeliverable) {
+      throw new TransientSendError(
+        `transport could not deliver to ${p.broker.id}: ${res.error ?? 'unspecified'}`,
+      );
+    }
+
     const base: RemovalRequest = {
       id: requestId,
       subjectId: subject.id,
@@ -182,6 +196,7 @@ export function event(
 }
 
 function describe(e: unknown): string {
+  if (e instanceof TransientSendError) return `transient: ${e.message}`;
   if (e instanceof ConsentRequiredError) return `consent: ${e.reason}`;
   if (e instanceof NoEntitlementError) return `no entitlement: ${e.message}`;
   if (e instanceof NoContactError) return `no contact: ${e.message}`;

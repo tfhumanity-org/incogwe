@@ -83,7 +83,14 @@ export function decideAction(
     return 'recur';
   }
 
-  if (req.status === 'escalated') return 'none';
+  if (req.status === 'escalated') {
+    // An escalated request is not abandoned. A broker that ignored us today may
+    // comply after a regulator complaint lands, so the right is re-asserted on the
+    // normal cycle. This branch used to return 'none' unconditionally, which made
+    // the nextActionAt that #escalate carefully set completely dead.
+    if (req.nextActionAt && now.getTime() >= new Date(req.nextActionAt).getTime()) return 'recur';
+    return 'none';
+  }
   if (req.status === 'planned') return 'none';
 
   const due = effectiveDue(req);
