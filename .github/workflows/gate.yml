@@ -1,0 +1,95 @@
+name: gate
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+# No secrets are needed and none should be available: the suite must never be able
+# to reach a real broker. See the "no live traffic" job below.
+permissions:
+  contents: read
+
+jobs:
+  gate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+
+      # `npm ci` installs only typescript and @types/node. deletewe has zero
+      # runtime dependencies, which is deliberate: a privacy product's dependency
+      # tree is part of its threat model.
+      - run: npm ci
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Tests
+        run: npm test
+
+  no-live-traffic:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # CI must not be able to send a legal letter or fetch a broker site, and the
+      # cheapest guarantee is that no such code exists to be called. These greps
+      # fail the build if someone adds an SMTP client or a fetch to src/.
+      - name: No outbound mail or HTTP client in src/
+        run: |
+          set -euo pipefail
+          # Match IMPORTS, not substrings: the bounce classifier legitimately has a
+          # rule called `bounce.body.smtp`, and the dashboard legitimately imports
+          # node:http to RUN a server. What must not appear is a way to send mail or
+          # to make an outbound request.
+          if grep -rnE "(from|require\\()\\s*['\"](nodemailer|@sendgrid/|mailgun|postmark|@aws-sdk/client-ses|smtp-client)" src/ --include='*.ts'; then
+            echo "::error::An outbound mail client appeared in src/. deletewe ships no live transport."
+            exit 1
+          fi
+          if grep -rnE "(^|[^.\\w])fetch\\(|\\bhttps?\\.request\\(|(from|require\\()\\s*['\"](axios|got|undici|node-fetch|superagent)" src/ --include='*.ts'; then
+            echo "::error::An outbound HTTP client appeared in src/. Discovery and transport are operator-supplied."
+            exit 1
+          fi
+
+      - name: Runtime dependencies stay at zero
+        run: |
+          set -euo pipefail
+          n=$(node -p "Object.keys(require('./package.json').dependencies ?? {}).length")
+          if [ "$n" != "0" ]; then
+            echo "::error::package.json gained $n runtime dependencies; deletewe ships with zero."
+            exit 1
+          fi
+
+      - name: Templates are still marked DRAFT
+        run: |
+          set -euo pipefail
+          # Removing the review gate must be a deliberate, reviewed change, not a
+          # side effect of editing jurisdictions.ts.
+          if ! grep -q "TemplatesNotReviewedError" src/engine/sender.ts; then
+            echo "::error::The template-review gate was removed from the sender."
+            exit 1
+          fi
+
+  broker-seed:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: '24', cache: npm }
+      - run: npm ci
+      # The broker list is data in the repo and anyone can diff it; this checks it
+      # still loads and validates, so a malformed row fails CI rather than the CLI.
+      - name: Broker registry loads and validates
+        run: |
+          node --experimental-strip-types -e "
+            import('./src/brokers/registry.ts').then((m) => {
+              const n = m.brokers.count();
+              if (n < 50) { console.error('only ' + n + ' brokers'); process.exit(1); }
+              console.log(n + ' brokers', JSON.stringify(m.brokers.summary()));
+            });
+          "

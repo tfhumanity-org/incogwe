@@ -42,6 +42,8 @@ These are enforced in code and in tests. Do not weaken them to make something pa
 | **Personal data encrypted at rest** | `seal()`/`open()`, AES-256-GCM, AAD bound to `table:column:row` | A ciphertext cannot be moved between rows |
 | **Deletion is real** | `Store.deleteSubject` removes rows | A flag is not erasure |
 | **No network in tests** | `MockTransport` has no socket | CI must never produce live broker traffic |
+| **No HTTP or mail client in `src/`** | `no-live-traffic` job in CI greps for imports and outbound calls | Transport and discovery are operator-supplied; absence of the code is the control |
+| **"Not checked" ≠ "absent"** | `Scheduler.#reverify` assigns `verified_absent` only on a positive observation | Manufacturing rank-1 evidence from silence would be the exact dishonesty the ADR exists to avoid |
 
 ---
 
@@ -87,7 +89,8 @@ src/
   mailbox/          inbound attribution, rules, classifier, reply processing
   consent/          authorisation text, grant/revoke, hash chain, the gate
   profiles/         family accounts, invitations, seats
-  custom/           user-submitted URL classification (a safety control)
+  custom/           user-submitted URL classification (a safety control) + execution
+  discovery/        adapters supplying observations; no live scraper ships
   store/            encrypted SQLite
   dashboard/        timeline, evidence pack, read-only HTTP API
   util/             ids, clock, redaction, logging
@@ -148,7 +151,9 @@ Do not do these autonomously:
   other than a real reviewer's name and date.
 - **File a regulator complaint.** Drafts are generated; filing is a human act, and the
   engine records `NOT filed — requires human review` on every draft.
-- **Add a scraper or discovery adapter** that fetches from a live broker site.
+- **Add a scraper or discovery adapter that fetches from a live broker site.** The
+  `DiscoveryAdapter` interface and a file-driven adapter exist; a networked one does not,
+  deliberately. CI fails if an HTTP client appears in `src/`.
 - **Commit an un-redacted email fixture.** Replace real identities with the test persona.
 
 ---

@@ -6,7 +6,7 @@
  * recurrence, or a re-verification. All state changes go through the store and
  * every one of them writes an event, because the event log is the evidence pack.
  */
-import type { Broker, RemovalRequest, Subject } from '../types.ts';
+import type { Broker, DiscoveryAdapter, RemovalRequest, Subject } from '../types.ts';
 import type { Clock } from '../util/clock.ts';
 import type { Store } from '../store/store.ts';
 import type { Transport } from './transport.ts';
@@ -26,6 +26,12 @@ export interface SchedulerConfig {
   readonly agentName: string;
   /** Where complaint drafts are written. Drafts, never filed automatically. */
   readonly complaintSink?: (filename: string, body: string) => void;
+  /**
+   * Supplies re-observations of public listings. Without one, re-verification can
+   * only record that it was due -- and `verified_absent`, the only rank-1 outcome
+   * in the system, is unreachable.
+   */
+  readonly discovery?: DiscoveryAdapter;
 }
 
 export interface TickResult {
@@ -33,6 +39,8 @@ export interface TickResult {
   readonly escalations: number;
   readonly recurrences: number;
   readonly reverifications: number;
+  /** Listings re-observed as gone, closing the request at evidence rank 1. */
+  readonly verifiedAbsent: number;
   readonly complaints: readonly string[];
   readonly actions: readonly { requestId: string; action: DueAction }[];
 }
@@ -50,7 +58,7 @@ export class Scheduler {
     const now = this.#cfg.clock.now();
     const store = this.#cfg.store;
     const actions: { requestId: string; action: DueAction }[] = [];
-    let followUps = 0, escalations = 0, recurrences = 0, reverifications = 0;
+    let followUps = 0, escalations = 0, recurrences = 0, reverifications = 0, verifiedAbsent = 0;
     const complaints: string[] = [];
 
     for (const req of store.openRequests()) {
@@ -70,15 +78,20 @@ export class Scheduler {
           break;
         }
         case 'recur': { this.#recur(req, broker, now); recurrences += 1; break; }
-        case 'reverify': { this.#reverify(req, broker, now); reverifications += 1; break; }
+        case 'reverify': {
+          const verified = await this.#reverify(req, broker, now);
+          reverifications += 1;
+          if (verified) verifiedAbsent += 1;
+          break;
+        }
       }
     }
 
     const purged = store.purgeUnattributedReplies(now);
     if (purged > 0) log.info('purged unattributed replies past retention', { purged });
 
-    log.info('scheduler tick', { followUps, escalations, recurrences, reverifications });
-    return { followUps, escalations, recurrences, reverifications, complaints, actions };
+    log.info('scheduler tick', { followUps, escalations, recurrences, reverifications, verifiedAbsent });
+    return { followUps, escalations, recurrences, reverifications, verifiedAbsent, complaints, actions };
   }
 
   async #followUp(req: RemovalRequest, broker: Broker, now: Date): Promise<void> {
@@ -164,15 +177,69 @@ export class Scheduler {
       `${broker.surface === 'public' ? 60 : 90}-day cycle. The next plan will send afresh.`));
   }
 
-  #reverify(req: RemovalRequest, broker: Broker, now: Date): void {
+  /**
+   * Re-observe a public listing and record what we find.
+   *
+   * This is the only place `verified_absent` is ever assigned, and it is assigned
+   * only on a positive observation that the listing is GONE. An adapter returning
+   * nothing means "not checked", which is not the same as "absent" and must never
+   * be recorded as one -- silence is the weakest evidence in the system, not the
+   * strongest.
+   *
+   * Returns true when the request was closed at evidence rank 1.
+   */
+  async #reverify(req: RemovalRequest, broker: Broker, now: Date): Promise<boolean> {
     const store = this.#cfg.store;
     const next = nextReverification(now, broker) ?? nextRecurrence(now, broker);
-    store.putRequest({ ...req, nextActionAt: next.toISOString() });
-    // Discovery is pluggable and may be absent; the event records the intent either way,
-    // so an operator can see that verification was due and whether an adapter ran.
+    const adapter = this.#cfg.discovery;
+
+    if (!adapter) {
+      store.putRequest({ ...req, nextActionAt: next.toISOString() });
+      store.putEvent(event(req.id, now, 'reverification',
+        `Re-verification due for the public listing at ${broker.name}, but no discovery ` +
+        'adapter is configured, so nothing was checked. The outcome is unchanged.'));
+      return false;
+    }
+
+    const subject = store.getSubject(req.subjectId);
+    if (!subject) return false;
+
+    const observed = (await adapter.observe(subject, [broker])).find((o) => o.brokerId === broker.id);
+
+    if (!observed) {
+      store.putRequest({ ...req, nextActionAt: next.toISOString() });
+      store.putEvent(event(req.id, now, 'reverification',
+        `Adapter ${adapter.id} returned no observation for ${broker.name}; not checked.`));
+      return false;
+    }
+
+    store.putObservation(observed);
+
+    if (observed.present) {
+      // The listing is back. That is a re-listing, and the request reopens on the
+      // strength of a fresh observation rather than waiting out the clock.
+      store.putRequest({
+        ...req, status: 'closed', outcome: req.outcome, nextActionAt: null, followUpCount: 0,
+      });
+      store.putEvent(event(req.id, now, 'reverification',
+        `Listing is PRESENT again at ${observed.url} — re-listed after a prior outcome of ` +
+        `${req.outcome ?? 'unknown'}. Queued for immediate re-assertion.`, observed.snapshotHash));
+      return false;
+    }
+
+    store.putRequest({
+      ...req,
+      status: 'closed',
+      outcome: 'verified_absent',
+      closedAt: req.closedAt ?? now.toISOString(),
+      observationId: observed.id,
+      nextActionAt: next.toISOString(),
+    });
     store.putEvent(event(req.id, now, 'reverification',
-      `Re-verification due for public listing at ${broker.name}. ` +
-      `Requires a discovery adapter; none is bundled with deletewe.`));
+      `Listing re-observed as ABSENT at ${observed.url} by adapter ${adapter.id}. ` +
+      'Outcome upgraded to verified_absent (evidence rank 1): independently re-observed, ' +
+      "not merely asserted by the broker.", observed.snapshotHash));
+    return true;
   }
 }
 

@@ -18,8 +18,10 @@ import { transportFromEnv } from './engine/transport.ts';
 import { createAccount, acceptInvite, createInvite, leaveAccount, seatStatus } from './profiles/account.ts';
 import { grantConsent, authorisationDocument } from './consent/consent.ts';
 import { submitCustomRemoval } from './custom/classify.ts';
+import { executeCustomRemoval } from './custom/execute.ts';
+import { FixtureDiscoveryAdapter, NullDiscoveryAdapter } from './discovery/adapters.ts';
 import { buildDashboard, renderBreakdown } from './dashboard/timeline.ts';
-import { buildEvidencePack, renderEvidencePack } from './dashboard/evidence.ts';
+import { buildEvidencePack, renderEvidencePack, renderEvidencePackHtml } from './dashboard/evidence.ts';
 import { createDashboardServer } from './dashboard/server.ts';
 import { ingest, parseEml } from './mailbox/inbound.ts';
 import { processReply } from './mailbox/process.ts';
@@ -65,14 +67,18 @@ deletewe — jurisdiction-aware personal data removal
 
   plan --subject ID [--limit N]          Plan requests. Sends nothing.
   send --subject ID [--limit N]          Plan and send via DELETEWE_TRANSPORT.
-  tick                                   Run the scheduler once: follow-ups, escalation.
+  tick [--observations F.json]           Run the scheduler once: follow-ups,
+                                         escalation, recurrence, re-verification.
 
   reply:ingest --file F.eml              Classify and apply one inbound reply.
 
-  custom --subject ID --url U            Submit a custom removal URL.
+  custom --subject ID --url U [--out DIR] [--classify-only]
+                                         Submit a URL, classify it, and run the
+                                         matching flow (send, delist, or queue).
+  custom:list --subject ID               Every submission and where it got to.
 
   dashboard --subject ID                 Print status, deadlines and breakdown.
-  evidence --subject ID [--out DIR]      Build the exportable evidence pack.
+  evidence --subject ID [--out DIR]      Evidence pack as json, txt and print-ready html.
   serve --token T [--port 8787]          Read-only JSON API.
 
 Environment: DELETEWE_MASTER_KEY (required), DELETEWE_DB, DELETEWE_TRANSPORT,
@@ -230,12 +236,23 @@ async function main(argv: string[]): Promise<number> {
       const store = openStore();
       const outDir = arg(args, 'out', './var/complaints');
       mkdirSync(outDir, { recursive: true });
+      // --observations points at a JSON file of re-observations. Without one,
+      // re-verification records that it was due and changes nothing, because
+      // "not checked" is not evidence of absence.
+      const obsFile = arg(args, 'observations', '');
+      const discovery = obsFile
+        ? FixtureDiscoveryAdapter.fromFile(obsFile, () => clock.now())
+        : new NullDiscoveryAdapter();
+
       const sched = new Scheduler({
         clock, store, registry, transport: transportFromEnv(), agentName: AGENT_NAME,
+        discovery,
         complaintSink: (f, b) => writeFileSync(join(outDir, f), b),
       });
       const r = await sched.tick();
-      console.log(`follow-ups ${r.followUps}, escalations ${r.escalations}, recurrences ${r.recurrences}, re-verifications ${r.reverifications}`);
+      console.log(`follow-ups ${r.followUps}, escalations ${r.escalations}, ` +
+        `recurrences ${r.recurrences}, re-verifications ${r.reverifications}, ` +
+        `verified absent ${r.verifiedAbsent}`);
       if (r.complaints.length) console.log(`complaint drafts written to ${outDir}:\n  ${r.complaints.join('\n  ')}`);
       store.close();
       return 0;
@@ -256,10 +273,47 @@ async function main(argv: string[]): Promise<number> {
       const store = openStore();
       const subject = store.getSubject(arg(args, 'subject'));
       if (!subject) { console.error('unknown subject'); store.close(); return 1; }
-      const c = submitCustomRemoval(arg(args, 'url'), subject, registry, clock.now());
-      store.putCustomRemoval(c);
-      console.log(`kind=${c.kind} eligible=${c.eligible} routed=${c.routedTo}${c.brokerId ? ` broker=${c.brokerId}` : ''}`);
-      console.log(c.reason);
+
+      const submitted = submitCustomRemoval(arg(args, 'url'), subject, registry, clock.now());
+      store.putCustomRemoval(submitted);
+      console.log(`kind=${submitted.kind}  eligible=${submitted.eligible}  routed=${submitted.routedTo}` +
+        `${submitted.brokerId ? `  broker=${submitted.brokerId}` : ''}`);
+      console.log(submitted.reason);
+
+      if (flag(args, 'classify-only')) { store.close(); return 0; }
+
+      const sender = new Sender({
+        agentName: AGENT_NAME, replyToBase: REPLY_TO, clock,
+        transport: transportFromEnv(), store,
+      });
+      const result = await executeCustomRemoval(submitted, subject, {
+        store, registry, sender, clock, agentName: AGENT_NAME,
+      });
+      console.log(`\nstatus=${result.custom.status}`);
+      if (result.custom.outcomeNote) console.log(result.custom.outcomeNote);
+      if (result.delistingText) {
+        const out = arg(args, 'out', '');
+        if (out) {
+          mkdirSync(out, { recursive: true });
+          const f = join(out, `delisting-${result.custom.id}.txt`);
+          writeFileSync(f, result.delistingText);
+          console.log(`\ndelisting text written to ${f}`);
+        } else {
+          console.log(`\n${result.delistingText}`);
+        }
+      }
+      store.close();
+      return 0;
+    }
+
+    case 'custom:list': {
+      const store = openStore();
+      const rows = store.customRemovalsFor(arg(args, 'subject'));
+      if (rows.length === 0) { console.log('no custom removals submitted'); store.close(); return 0; }
+      for (const c of rows) {
+        console.log(`${c.submittedAt.slice(0, 10)}  ${c.status.padEnd(26)} ${c.kind.padEnd(22)} ${c.url}`);
+        if (c.outcomeNote) console.log(`            ${c.outcomeNote}`);
+      }
       store.close();
       return 0;
     }
@@ -291,7 +345,9 @@ async function main(argv: string[]): Promise<number> {
         mkdirSync(out, { recursive: true });
         writeFileSync(join(out, 'evidence.json'), JSON.stringify(pack, null, 2));
         writeFileSync(join(out, 'evidence.txt'), renderEvidencePack(pack));
-        console.log(`wrote ${join(out, 'evidence.json')} and evidence.txt`);
+        writeFileSync(join(out, 'evidence.html'), renderEvidencePackHtml(pack));
+        console.log(`wrote evidence.json, evidence.txt and evidence.html to ${out}`);
+        console.log('evidence.html is laid out for printing; any browser will save it as PDF.');
         console.log(`manifest sha256: ${pack.manifestSha256}`);
       } else {
         console.log(renderEvidencePack(pack));

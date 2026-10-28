@@ -1,20 +1,44 @@
 /**
- * Build the broker seed from the California Privacy Protection Agency Data Broker
- * Registry, an open government dataset (no access control, no scraping).
+ * Build the broker seed from a public data-broker registry.
  *
  *   curl -o var/cppa-registry.csv https://cppa.ca.gov/data_broker_registry/registry.csv
  *   npm run seed:cppa -- var/cppa-registry.csv src/brokers/seed/brokers.json
  *
- * Why this source rather than a hand-curated list (ADR-0001 D8): it is authoritative,
- * machine-readable, carries the broker's own declared legal contact, its declared
- * sensitive-data categories, and -- uniquely -- its self-reported median days to
+ * Why a government registry rather than a hand-curated list (ADR-0001 D8): it is
+ * authoritative, machine-readable, carries each broker's own declared legal contact
+ * and sensitive-data categories, and -- uniquely -- its self-reported median days to
  * respond to a deletion request. No vendor publishes that.
  *
- * Its limitation is equally important and is recorded in each row's provenance: the
- * registry covers brokers that registered in California. Researchers found roughly
- * 71.7% of data brokers are registered with no authority at all (PoPETs 2025).
+ * ## Why only California
+ *
+ * Four US states operate a data-broker registry. Only one of them can be used here,
+ * and the reasons are worth recording rather than leaving as an apparent gap:
+ *
+ *   California (CPPA)  USED. Open CSV at a stable URL, 603 registrants, 77 columns.
+ *   Vermont (SoS)      BLOCKED. The registry is public to browse, but the bulk file
+ *                      is behind an account on bizfilings.vermont.gov. deletewe's
+ *                      research rules forbid creating an account or scraping behind
+ *                      a login, so the ~283 Vermont registrants are absent by
+ *                      choice, not oversight.
+ *   Oregon (DFR)       BLOCKED. DFR publishes daily licensee extracts, but the data
+ *                      broker file is not among them, and the registry page refuses
+ *                      a plain fetch (HTTP 401).
+ *   Texas (SoS)        Searchable web UI only; no published extract found.
+ *
+ * The consequence is a real coverage limit: a registrant that registered in Vermont
+ * or Oregon but not California will not appear. The CPPA registry is the largest of
+ * the four, and researchers found ~71.7% of brokers are registered with no authority
+ * at all (PoPETs 2025), so no registry-derived list is ever complete.
+ *
+ * ## Adding a source
+ *
+ * The column mapping below is specific to the CPPA schema. To add a registry,
+ * write a `toBroker`-equivalent for its columns and reuse `selectionScore` and the
+ * category-floor selection; everything downstream is schema-agnostic. Set each row's
+ * `provenance` to `<registry>:<snapshot date>` so the origin of every broker in the
+ * shipped list stays auditable.
  */
-import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
+import { readFileSync, writeFileSync, mkdirSync, statSync } from 'node:fs';
 import { dirname } from 'node:path';
 import type { Broker, BrokerCategory, BrokerSurface, IdentifierKind } from '../src/types.ts';
 
@@ -223,14 +247,19 @@ function selectionScore(b: Broker, row: string[]): number {
 }
 
 function main(): void {
-  const [inPath, outPath, limitArg] = process.argv.slice(2);
+  const [inPath, outPath, limitArg, dateArg] = process.argv.slice(2);
   if (!inPath || !outPath) {
-    console.error('usage: import-cppa.ts <registry.csv> <out.json> [limit]');
+    console.error('usage: import-cppa.ts <registry.csv> <out.json> [limit] [snapshot-date]');
     process.exit(2);
   }
   const limit = Number(limitArg ?? 70);
   const rows = parseCsv(readFileSync(inPath, 'utf8').replace(/^﻿/, ''));
-  const snapshotDate = new Date().toISOString().slice(0, 10);
+
+  // The snapshot date comes from the input file, not from the clock. Stamping
+  // today's date made every regeneration produce a diff in all 70 rows, which
+  // defeats the point of shipping the list as auditable data (ADR-0001 D8): a
+  // reviewer could not tell "the registry changed" from "someone re-ran the tool".
+  const snapshotDate = dateArg ?? statSync(inPath).mtime.toISOString().slice(0, 10);
   const body = rows.slice(1).filter((r) => r.length > COL.deleteMedianDays);
 
   const scored = body
@@ -281,7 +310,7 @@ function main(): void {
   writeFileSync(outPath, JSON.stringify(out, null, 2) + '\n');
 
   const byCat = out.reduce<Record<string, number>>((m, b) => ((m[b.category] = (m[b.category] ?? 0) + 1), m), {});
-  console.log(`wrote ${out.length} brokers to ${outPath}`);
+  console.log(`wrote ${out.length} brokers to ${outPath} (snapshot ${snapshotDate})`);
   console.log(byCat);
 }
 

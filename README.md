@@ -35,8 +35,11 @@ dominant commercial approaches ([research](docs/research/), [ADR-0001](docs/adr/
 | Jurisdictions | 22 instruments: GDPR, UK GDPR, Swiss FADP, PIPEDA, CCPA/CPRA, CA Delete Act, and 16 US state acts |
 | Request templates | **DRAFT — not reviewed by a lawyer.** Live sending is blocked in code until an operator attests review |
 | Outbound transport | **Not shipped.** `dryrun` and in-process `mock` only; see [Sending for real](#sending-for-real) |
-| Discovery / scanning | **Interface only.** No scraper is bundled |
-| Tests | 170, all passing. No network access in the suite |
+| Discovery / scanning | Full path built and tested. **No live scraper is bundled** — supply observations from a file or your own crawler; see [Discovery](#discovery) |
+| Custom removals | Classified **and executed**: known brokers become statutory requests, search results become delisting text, everything else queues |
+| Evidence pack | JSON, plain text, and print-ready HTML |
+| CI | `.github/workflows/gate.yml` — typecheck, tests, and guards against a live transport or HTTP client reaching `src/` |
+| Tests | 253, all passing. No network access in the suite |
 
 ---
 
@@ -94,9 +97,12 @@ deletewe evidence --subject subj_... --out ./var/evidence
 
 ```bash
 deletewe brokers [--category financial] [--json]   # the list, with provenance
+deletewe custom:list --subject S                   # submissions and where they got to
 deletewe jurisdictions                             # instruments and their deadlines
-deletewe custom  --subject S --url URL             # classify a user-submitted URL
+deletewe custom  --subject S --url URL             # classify AND run the matching flow
+                 [--classify-only] [--out DIR]     #   (--classify-only stops after classifying)
 deletewe reply:ingest --file reply.eml             # classify and apply one reply
+deletewe tick --observations obs.json              # also re-verify public listings
 deletewe account:invite --account A                # family: a one-time link
 deletewe account:join   --account A --token T ...  # the invitee signs their own
 deletewe account:seats  --account A                # who can actually send
@@ -156,6 +162,44 @@ nobody outside can audit is a trust liability; a list anybody can diff is a trus
 | No personal data in logs | `src/util/redact.ts` + `src/util/logging.ts` — the logger has no raw-output escape hatch |
 | Deletion is real | `Store.deleteSubject` removes rows; `account:leave` is available to the member, not only the owner |
 | Tamper-evident consent | Hash-chained consent log; the evidence pack reports `chainValid` |
+
+---
+
+## Discovery
+
+Discovery answers one question: is this subject's record visible on this broker's
+public surface right now? It feeds the engine twice and gates neither — an observation
+*enriches* a letter, and a re-observation showing a listing is **gone** is the only
+rank-1 evidence in the system.
+
+**deletewe ships no adapter that fetches a live broker site**, for the same reason it
+ships no SMTP client. Scraping a people-search site is an outward-facing action with
+terms-of-service and rate questions that are the operator's to answer in their
+jurisdiction, not ours to answer by default.
+
+What ships is the whole path it plugs into, plus a file-driven adapter — so an operator
+who checks listings by hand, or who runs their own crawler out of process, gets rank-1
+evidence without any network code living in this repository:
+
+```jsonc
+// observations.json
+[
+  { "brokerId": "spokeo", "url": "https://www.spokeo.com/...", "present": false }
+]
+```
+
+```bash
+deletewe tick --observations observations.json
+#  → re-verifications 1, verified absent 1
+```
+
+`present: false` upgrades the outcome to `verified_absent`. `present: true` records a
+re-listing and queues immediate re-assertion. **No observation at all leaves the outcome
+untouched** — "not checked" is never recorded as "absent", because silence is the
+weakest evidence in the system, not the strongest.
+
+To use a live crawler, implement `DiscoveryAdapter` (two methods, see
+`src/discovery/adapters.ts`) and pass it to the `Scheduler`.
 
 ---
 

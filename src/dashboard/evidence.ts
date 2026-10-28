@@ -134,3 +134,106 @@ export function renderEvidencePack(pack: EvidencePack): string {
   for (const n of pack.notes) L.push(`  - ${n}`);
   return L.join('\n') + '\n';
 }
+
+/**
+ * Print-ready HTML rendering of the pack.
+ *
+ * A regulator, a lawyer or a journalist wants a document, not a JSON file. This is
+ * HTML rather than PDF deliberately: generating a real PDF means a dependency and a
+ * font stack, and any browser prints this to PDF with the page breaks already set.
+ * The content is identical to the text rendering -- same four outcomes, same ranks,
+ * same digests -- so neither format can quietly say something the other does not.
+ */
+export function renderEvidencePackHtml(pack: EvidencePack): string {
+  const esc = (v: unknown) => String(v)
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+
+  const RANK_LABEL: Record<number, string> = {
+    1: 'Rank 1 — independently re-observed as absent',
+    2: 'Rank 2 — the broker stated in writing that it deleted',
+    3: 'Rank 3 — the broker stated it held nothing. NOT a deletion.',
+    4: 'Rank 4 — refused, or the statutory deadline passed unanswered',
+    5: 'Rank 5 — the letter never arrived',
+  };
+
+  const items = pack.items.map((i) => `
+    <section class="item">
+      <h3>${esc(i.broker.name)} <span class="cat">${esc(i.broker.category)}</span></h3>
+      <dl>
+        <dt>Reference</dt><dd class="mono">${esc(i.requestId)}</dd>
+        <dt>Instrument</dt><dd>${esc(i.instrument.name)}</dd>
+        <dt>Contact</dt><dd>${esc(i.broker.contact ?? '—')}</dd>
+        <dt>Sent</dt><dd>${esc(i.sentAt ?? '—')}</dd>
+        <dt>Deadline</dt><dd>${esc(i.dueAt ?? '—')} <span class="muted">${esc(i.instrument.deadlineCitation)}</span></dd>
+        <dt>Outcome</dt><dd><strong>${esc(i.outcome ?? 'open')}</strong>${
+          i.evidenceRank ? ` <span class="muted">${esc(RANK_LABEL[i.evidenceRank] ?? '')}</span>` : ''
+        }</dd>
+        ${i.letter ? `<dt>Letter digest</dt><dd class="mono">${esc(i.letter.sha256)}
+          <span class="${i.letter.verified ? 'ok' : 'bad'}">integrity ${i.letter.verified ? 'OK' : 'FAILED'}</span></dd>` : ''}
+      </dl>
+      <table class="events">
+        <thead><tr><th>When</th><th>Event</th><th>Detail</th></tr></thead>
+        <tbody>${i.events.map((e) => `
+          <tr><td class="mono nowrap">${esc(e.at.slice(0, 16).replace('T', ' '))}</td>
+              <td class="mono">${esc(e.kind)}</td><td>${esc(e.detail)}</td></tr>`).join('')}
+        </tbody>
+      </table>
+      ${i.letter ? `<details><summary>Letter as sent</summary><pre>${esc(i.letter.body)}</pre></details>` : ''}
+    </section>`).join('');
+
+  return `<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<title>deletewe evidence pack — ${esc(pack.subject.name)}</title>
+<style>
+  :root { --fg:#111; --muted:#555; --rule:#ccc; --bad:#a00; --ok:#060; }
+  body { font:13px/1.5 Georgia,'Times New Roman',serif; color:var(--fg); max-width:48rem; margin:2rem auto; padding:0 1rem; }
+  h1 { font-size:1.4rem; border-bottom:2px solid var(--fg); padding-bottom:.3rem; }
+  h2 { font-size:1.1rem; margin-top:2rem; border-bottom:1px solid var(--rule); }
+  h3 { font-size:1rem; margin:0 0 .4rem; }
+  .cat { font-weight:normal; color:var(--muted); font-size:.85em; }
+  .mono { font-family:ui-monospace,Menlo,Consolas,monospace; font-size:.85em; word-break:break-all; }
+  .nowrap { white-space:nowrap; }
+  .muted { color:var(--muted); font-size:.9em; }
+  .ok { color:var(--ok); } .bad { color:var(--bad); font-weight:bold; }
+  dl { display:grid; grid-template-columns:9rem 1fr; gap:.15rem .8rem; margin:.4rem 0; }
+  dt { color:var(--muted); } dd { margin:0; }
+  .item { border:1px solid var(--rule); padding:.8rem; margin:.8rem 0; break-inside:avoid; }
+  table.events { width:100%; border-collapse:collapse; margin-top:.6rem; font-size:.85em; }
+  table.events th, table.events td { border-top:1px solid var(--rule); padding:.2rem .4rem; text-align:left; vertical-align:top; }
+  pre { white-space:pre-wrap; font-size:.8em; background:#f6f6f6; padding:.6rem; }
+  .notes li { margin:.3rem 0; }
+  @media print { body { max-width:none; margin:0; } details { display:none; } }
+</style></head><body>
+<h1>deletewe evidence pack</h1>
+<dl>
+  <dt>Data subject</dt><dd>${esc(pack.subject.name)} (${esc(pack.subject.residence)})</dd>
+  <dt>Generated</dt><dd>${esc(pack.generatedAt)}</dd>
+  <dt>Manifest digest</dt><dd class="mono">${esc(pack.manifestSha256)}</dd>
+</dl>
+
+<h2>Authorisation</h2>
+<p>Hash chain: <strong class="${pack.consent.chainValid ? 'ok' : 'bad'}">${pack.consent.chainValid ? 'VALID' : 'INVALID'}</strong></p>
+<table class="events"><thead><tr><th>Granted</th><th>Scopes</th><th>Document digest</th><th>State</th></tr></thead><tbody>
+${pack.consent.entries.map((c) => `<tr>
+  <td class="nowrap">${esc(c.grantedAt.slice(0, 10))}</td>
+  <td>${esc(c.scopes.join(', '))}</td>
+  <td class="mono">${esc(c.documentHash.slice(0, 24))}</td>
+  <td>${c.revokedAt ? `revoked ${esc(c.revokedAt.slice(0, 10))}` : `expires ${esc(c.expiresAt.slice(0, 10))}`}</td>
+</tr>`).join('')}
+</tbody></table>
+
+<h2>Outcomes</h2>
+<p class="muted">Reported separately by evidence rank and deliberately never summed.</p>
+<table class="events"><thead><tr><th>Outcome</th><th>Count</th></tr></thead><tbody>
+${Object.entries(pack.summary).map(([k, v]) => `<tr><td>${esc(k)}</td><td>${esc(v)}</td></tr>`).join('')}
+</tbody></table>
+
+<h2>Requests</h2>
+${items}
+
+<h2>Notes</h2>
+<ul class="notes">${pack.notes.map((n) => `<li>${esc(n)}</li>`).join('')}</ul>
+</body></html>
+`;
+}

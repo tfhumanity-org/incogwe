@@ -97,6 +97,22 @@ authorities at all** `[SOURCED]`, and separately that cross-service broker-list 
 is very low — mean Jaccard similarity **0.21**, with Incogni's highest pairwise overlap
 being only 0.19 `[SOURCED]`.
 
+### Which registries are actually usable
+
+`[SOURCED]` Four US states run a data-broker registry; only one publishes a file we
+can lawfully take:
+
+| Registry | Status for deletewe |
+|---|---|
+| **California (CPPA)** | **Used.** Open CSV, stable URL, 603 registrants, 77 disclosure columns. |
+| Vermont (Secretary of State) | **Blocked.** ~283 registrants, browsable, but the bulk download sits behind an account on `bizfilings.vermont.gov`. Creating one would breach our own research rules. |
+| Oregon (DFR) | **Blocked.** DFR publishes daily licensee extracts; the data-broker file is not among them, and the registry page returns HTTP 401 to a plain fetch. |
+| Texas (Secretary of State) | Searchable web UI only; no published extract found. |
+
+`[INFERRED]` So even a registry-driven list is structurally partial, and that is before
+the PoPETs finding that most brokers register nowhere. Any coverage number — ours or a
+vendor's — should be read as "brokers we could enumerate", never "brokers that exist".
+
 `[INFERRED]` Two conclusions for deletewe:
 1. **No vendor's list is the market.** If the best pairwise overlap is 0.19, then
    switching services changes *which* brokers you reach far more than *how many*.

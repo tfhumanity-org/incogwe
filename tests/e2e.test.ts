@@ -14,7 +14,7 @@ import { RateLimiter } from '../src/engine/ratelimit.ts';
 import { processReply } from '../src/mailbox/process.ts';
 import { ingest } from '../src/mailbox/inbound.ts';
 import { buildDashboard } from '../src/dashboard/timeline.ts';
-import { buildEvidencePack, renderEvidencePack } from '../src/dashboard/evidence.ts';
+import { buildEvidencePack, renderEvidencePack, renderEvidencePackHtml } from '../src/dashboard/evidence.ts';
 import { addDays, fixedClock } from '../src/util/clock.ts';
 import { broker, memStore, registryOf, seedSubject, subject, T0 } from './helpers.ts';
 import type { Store } from '../src/store/store.ts';
@@ -487,6 +487,48 @@ describe('evidence pack', () => {
     });
     const b = buildEvidencePack(h.store, h.registry, h.subject, T0);
     assert.notEqual(a.manifestSha256, b.manifestSha256);
+    h.store.close();
+  });
+});
+
+describe('evidence pack HTML export', () => {
+  test('carries the same four outcomes and ranks as the text rendering', async () => {
+    const h = harness();
+    await new Sender({
+      agentName: 'deletewe test', replyToBase: 'deletions@deletewe.invalid',
+      clock: h.clock, transport: h.transport, store: h.store,
+    }).sendPlan(h.subject, planRequests(h.subject, { registry: h.registry }).requests);
+
+    const day3 = addDays(T0, 3);
+    for (const r of h.store.requestsForSubject(h.subject.id)) {
+      const b = BEHAVIOURS[r.brokerId as keyof typeof BEHAVIOURS];
+      if (!b?.reply || b.reply === 'bounce') continue;
+      processReply(replyTo(h.store, r, b.reply, day3), { store: h.store, registry: h.registry, now: day3 });
+    }
+
+    const pack = buildEvidencePack(h.store, h.registry, h.subject, day3);
+    const html = renderEvidencePackHtml(pack);
+
+    assert.match(html, /^<!doctype html>/);
+    assert.match(html, /deletewe evidence pack/);
+    assert.match(html, /Rank 3 — the broker stated it held nothing\. NOT a deletion\./);
+    assert.match(html, /deliberately never summed/);
+    assert.match(html, /integrity OK/);
+    assert.match(html, new RegExp(pack.manifestSha256));
+    assert.match(html, /@media print/, 'it must be printable to PDF');
+
+    // Every outcome in the JSON appears in the HTML; neither format may say less.
+    for (const k of Object.keys(pack.summary)) assert.match(html, new RegExp(k));
+    h.store.close();
+  });
+
+  test('escapes content rather than interpolating it raw', () => {
+    const h = harness();
+    const s = subject({ identifiers: { fullName: 'Avery <script>alert(1)</script>', emails: ['a@b.co'], locality: 'Oakland' } });
+    h.store.putSubject(s);
+    const html = renderEvidencePackHtml(buildEvidencePack(h.store, h.registry, s, T0));
+    assert.ok(!html.includes('<script>alert(1)</script>'));
+    assert.match(html, /&lt;script&gt;/);
     h.store.close();
   });
 });

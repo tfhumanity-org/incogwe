@@ -178,5 +178,8 @@ export function submitCustomRemoval(
     routedTo: c.routedTo,
     brokerId: c.brokerId,
     submittedAt: now.toISOString(),
+    status: c.routedTo === 'rejected' ? 'rejected' : 'submitted',
+    requestId: null,
+    outcomeNote: null,
   };
 }

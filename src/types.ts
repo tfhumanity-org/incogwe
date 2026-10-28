@@ -366,6 +366,25 @@ export type CustomRemovalKind =
   | 'unrecognised_host'
   | 'ineligible';
 
+export type CustomRemovalRoute = 'legal_request' | 'search_delisting' | 'manual_review' | 'rejected';
+
+/**
+ * Where a submission has got to. Classification alone used to be the end of the
+ * line -- a row was written saying "this should become a legal request" and nothing
+ * ever made one.
+ */
+export type CustomRemovalStatus =
+  | 'submitted'
+  /** A statutory request was planned and sent for it. `requestId` points at it. */
+  | 'request_sent'
+  /** We know who to write to but not where: the host has no legal contact on file. */
+  | 'awaiting_broker_contact'
+  /** Delisting text was generated; a person must submit it to the search engine's own form. */
+  | 'awaiting_manual_submission'
+  /** A human needs to look before anything is sent. */
+  | 'queued_for_review'
+  | 'rejected';
+
 export interface CustomRemovalRequest {
   readonly id: string;
   readonly subjectId: string;
@@ -373,7 +392,12 @@ export interface CustomRemovalRequest {
   readonly kind: CustomRemovalKind;
   readonly eligible: boolean;
   readonly reason: string;
-  readonly routedTo: 'legal_request' | 'search_delisting' | 'manual_review' | 'rejected';
+  readonly routedTo: CustomRemovalRoute;
   readonly brokerId: string | null;
   readonly submittedAt: string;
+  readonly status: CustomRemovalStatus;
+  /** The statutory request this submission produced, if it produced one. */
+  readonly requestId: string | null;
+  /** What happened when the route was executed. Shown to the user. */
+  readonly outcomeNote: string | null;
 }
